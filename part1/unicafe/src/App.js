@@ -1,13 +1,21 @@
 import { useState } from 'react'
 
-const Statistics = ({ stats }) => (
-  <div>
-    <h2>Statistics</h2>
-    good {stats.good} <br/>
-    neutral {stats.neutral} <br/>
-    bad {stats.bad}
-  </div>
-)
+const Statistics = ({ stats }) => {
+  let all = Object.values(stats).reduce((a, b) => a + b, 0)
+  let average = (Number(stats.good) * 1 + Number(stats.neutral) * 0 + Number(stats.bad) * -1) / all
+  let positive = (stats.good / all) * 100
+  return (
+    <div>
+      <h2>Statistics</h2>
+      good {stats.good} <br/>
+      neutral {stats.neutral} <br/>
+      bad {stats.bad} <br/>
+      all {all} <br/>
+      average {average} <br/>
+      positive {positive}%
+    </div>
+  )
+}
 
 const Button = ({ handleClick, text }) => (
   <button onClick={handleClick}>
