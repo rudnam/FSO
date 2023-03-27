@@ -2,7 +2,10 @@ import { useState } from 'react'
 
 const StatisticLine = ({ text, value }) => {
   return (
-    <>{text} {value} <br/> </>
+    <tr>
+      <td>{text}</td>
+      <td>{value}</td>
+    </tr>
   )
 }
 
@@ -23,12 +26,17 @@ const Statistics = ({ stats }) => {
   return (
     <div>
       <h2>Statistics</h2>
-      <StatisticLine text='good' value={stats.good} />
-      <StatisticLine text='neutral' value={stats.neutral} />
-      <StatisticLine text='bad' value={stats.bad} />
-      <StatisticLine text='all' value={all} />
-      <StatisticLine text='average' value={average} />
-      <StatisticLine text='positive' value={positive} />
+      <table>
+        <tbody>
+          <StatisticLine text='good' value={stats.good} />
+          <StatisticLine text='neutral' value={stats.neutral} />
+          <StatisticLine text='bad' value={stats.bad} />
+          <StatisticLine text='all' value={all} />
+          <StatisticLine text='average' value={average} />
+          <StatisticLine text='positive' value={positive} />
+        </tbody>
+      </table>
+      
     </div>
   )
 }
