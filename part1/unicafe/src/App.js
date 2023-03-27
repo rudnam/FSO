@@ -1,9 +1,14 @@
 import { useState } from 'react'
 
+const StatisticLine = ({ text, value }) => {
+  return (
+    <>{text} {value} <br/> </>
+  )
+}
+
 const Statistics = ({ stats }) => {
 
   let all = Object.values(stats).reduce((a, b) => a + b, 0)
-
   if (!all) {
     return (
       <div>
@@ -12,17 +17,18 @@ const Statistics = ({ stats }) => {
       </div>
     )
   }
+
   let average = (Number(stats.good) * 1 + Number(stats.neutral) * 0 + Number(stats.bad) * -1) / all
-  let positive = (stats.good / all) * 100
+  let positive = ((stats.good / all) * 100) + '%'
   return (
     <div>
       <h2>Statistics</h2>
-      good {stats.good} <br/>
-      neutral {stats.neutral} <br/>
-      bad {stats.bad} <br/>
-      all {all} <br/>
-      average {average} <br/>
-      positive {positive}%
+      <StatisticLine text='good' value={stats.good} />
+      <StatisticLine text='neutral' value={stats.neutral} />
+      <StatisticLine text='bad' value={stats.bad} />
+      <StatisticLine text='all' value={all} />
+      <StatisticLine text='average' value={average} />
+      <StatisticLine text='positive' value={positive} />
     </div>
   )
 }
