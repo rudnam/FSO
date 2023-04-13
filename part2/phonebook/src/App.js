@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import Error from './components/Error'
 import Filter from './components/Filter'
 import Notification from './components/Notification'
 import PersonForm from './components/PersonForm'
@@ -10,7 +11,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterValue, setFilterValue] = useState('')
-  const [notifMessage, setNotifMessage] = useState('')
+  const [notifMessage, setNotifMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     PersonService
@@ -35,6 +37,13 @@ const App = () => {
             setTimeout(() => {
               setNotifMessage(null)
             }, 3000)
+          })
+          .catch(error => {
+            setErrorMessage(`Information of ${personToUpdate.name} has already been removed from server`)
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 3000)
+            setPersons(persons.filter(person => person.id !== personToUpdate.id))
           })
       }
       return
@@ -94,6 +103,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <Notification message={notifMessage} />
+      <Error message={errorMessage} />
       <Filter value={filterValue} handleEvent={handlefilterValueChange} />
       <h2>add a new</h2>
       <PersonForm
