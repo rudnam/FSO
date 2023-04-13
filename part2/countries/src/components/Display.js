@@ -1,21 +1,10 @@
+import CountryInfo from "./CountryInfo"
+
 const Display = ({ toDisplay, options, showHandler }) => {
     
     if (toDisplay) {
         return (
-            <div>
-                <h2>{toDisplay.name.common}</h2>
-                <br />
-                <span>capital {toDisplay.capital[0]}</span><br />
-                <span>area {toDisplay.area}</span><br />
-                <br />
-                <b>languages:</b> <br />
-                <ul>
-                    {Object.keys(toDisplay.languages).map((key, index) => (
-                        <li key={index}>{toDisplay.languages[key]}</li>
-                    ))}
-                </ul>
-                <img src={toDisplay.flags.png} alt={toDisplay.flags.alt}></img>
-            </div>
+            <CountryInfo country={toDisplay} />
         )
     } else if (options.length > 10) {
         return (

@@ -7,6 +7,7 @@ function App() {
   const [countries, setCountries] = useState(null)
   const [options, setOptions] = useState([])
   const [toDisplay, setToDisplay] = useState(null)
+  const api_key = process.env.REACT_APP_API_KEY
 
   useEffect(() => {
     axios
@@ -25,16 +26,13 @@ function App() {
         setOptions(newOptions)
       }
       if (newOptions.length === 1) {
-        setToDisplay(newOptions[0])
+        const country = newOptions[0]
+        setToDisplay(country)
       } else {
         setToDisplay(null)
       }
     }
-    
-    
-  },[countries, query])
-
-
+  },[api_key, countries, query])
 
   const handleChange = (event) => {
     setQuery(event.target.value)
