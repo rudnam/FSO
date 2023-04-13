@@ -3,9 +3,10 @@ import axios from 'axios'
 import Display from './components/Display'
 
 function App() {
-  const [query, setQuery] = useState(null)
+  const [query, setQuery] = useState('')
   const [countries, setCountries] = useState(null)
-  const [toShow, setToShow] = useState([])
+  const [options, setOptions] = useState([])
+  const [toDisplay, setToDisplay] = useState(null)
 
   useEffect(() => {
     axios
@@ -16,22 +17,37 @@ function App() {
   },[])
 
   useEffect(() => {
-    if (query) {
-      setToShow(countries.filter(country => {
+    if (countries) {
+      const newOptions = countries.filter(country => {
         return country.name.common.toLowerCase().includes(query.toLowerCase())
-      }))
+      })
+      if (query) {
+        setOptions(newOptions)
+      }
+      if (newOptions.length === 1) {
+        setToDisplay(newOptions[0])
+      } else {
+        setToDisplay(null)
+      }
     }
+    
+    
   },[countries, query])
+
+
 
   const handleChange = (event) => {
     setQuery(event.target.value)
   }
 
+  const showCountry = (country) => {
+    setToDisplay(country)
+  }
 
   return (
     <div>
       <span>find countries</span> <input onChange={handleChange}></input>
-      <Display toShow={toShow} />
+      <Display toDisplay={toDisplay} options={options} showHandler={showCountry} />
     </div>
   );
 }

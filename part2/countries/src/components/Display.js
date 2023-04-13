@@ -1,24 +1,23 @@
-const Display = ({ toShow }) => {
+const Display = ({ toDisplay, options, showHandler }) => {
     
-    if (toShow.length === 1) {
-        const country = toShow[0]
+    if (toDisplay) {
         return (
             <div>
-                <h2>{country.name.common}</h2>
+                <h2>{toDisplay.name.common}</h2>
                 <br />
-                <span>capital {country.capital[0]}</span><br />
-                <span>area {country.area}</span><br />
+                <span>capital {toDisplay.capital[0]}</span><br />
+                <span>area {toDisplay.area}</span><br />
                 <br />
                 <b>languages:</b> <br />
                 <ul>
-                    {Object.keys(country.languages).map((key, index) => (
-                        <li key={index}>{country.languages[key]}</li>
+                    {Object.keys(toDisplay.languages).map((key, index) => (
+                        <li key={index}>{toDisplay.languages[key]}</li>
                     ))}
                 </ul>
-                <img src={country.flags.png} alt={country.flags.alt}></img>
+                <img src={toDisplay.flags.png} alt={toDisplay.flags.alt}></img>
             </div>
         )
-    } else if (toShow.length > 10) {
+    } else if (options.length > 10) {
         return (
             <div>
                 <span>Too many matches, specify another filter</span>
@@ -27,8 +26,8 @@ const Display = ({ toShow }) => {
     } else {
         return (
             <div>
-                {toShow.map((country, index) => (
-                    <span key={index}>{country.name.common}<br /></span>
+                {options.map((country, index) => (
+                    <span key={index}>{country.name.common} <button onClick={() => showHandler(country)}>show</button><br /></span>
                 ))}
             </div>
         )
