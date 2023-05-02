@@ -1,0 +1,24 @@
+# fly.toml app configuration file generated for late-field-4270 on 2023-05-02T16:57:33+08:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "late-field-4270"
+primary_region = "sin"
+
+[env]
+  PORT = "8080"
+
+[experimental]
+  auto_rollback = true
+
+[[services]]
+  http_checks = []
+  internal_port = 8080 
+  processes = ["app"]
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
