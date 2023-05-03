@@ -6,5 +6,5 @@ content-type: application/json
 
 {
     "name": "sample1",
-    "number": "789-9999"
+    "number": "7899888999"
 }
