@@ -11,8 +11,8 @@ morgan.token('data', function getData (request) {
 const app = express()
 
 app.use(cors())
-app.use(express.json())
 app.use(express.static('build'))
+app.use(express.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'))
 
 let persons = [
@@ -57,10 +57,12 @@ app.get('/api/persons/:id', (request, response) => {
     })
 })
 
-app.delete('/api/persons/:id', (request, response) => {
-    Person.findById(request.params.id).deleteOne().then(a => {
-        response.status(204).end()
-    })
+app.delete('/api/persons/:id', (request, response, next) => {
+    Person.findByIdAndRemove(request.params.id)
+        .then(result => {
+            response.status(204).end()
+        })
+        .catch(error => next(error))
 })
 
 const generateId = () => {
