@@ -46,25 +46,21 @@ app.get('/api/persons', (request, response) => {
 
 app.get('/info', (request, response) => {
     const d = new Date();
-    response.send(`<p>Phonebook has info for ${persons.length} people</p><p>${d}</p>`)
+    Person.find({}).then(persons => {
+        response.send(`<p>Phonebook has info for ${persons.length} people</p><p>${d}</p>`)
+    })
 })
 
 app.get('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    const person = persons.find(person => person.id === id)
-    
-    if (person) {
+    Person.findById(request.params.id).then(person => {
         response.json(person)
-    } else {
-        response.status(404).end()
-    }
+    })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    persons = persons.filter(person => person.id !== id)
-  
-    response.status(204).end()
+    Person.findById(request.params.id).deleteOne().then(a => {
+        response.status(204).end()
+    })
 })
 
 const generateId = () => {
@@ -90,15 +86,14 @@ app.post('/api/persons', (request, response) => {
         })
     }
 
-    const person = {
+    const person = new Person({
         name: body.name,
         number: body.number,
-        id: generateId(),
-    }
+    })
     
-    persons = persons.concat(person)
-    
-    response.json(person)
+    person.save().then(savedPerson => {
+        response.json(savedPerson)
+    })
 })
 
 const PORT = process.env.PORT || 3001
