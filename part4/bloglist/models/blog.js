@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const config = require('../utils/config')
+const config = require('../utils/config');
 
 mongoose.set('strictQuery', false);
 
@@ -14,11 +14,11 @@ mongoose.connect(url)
   });
 
 const blogSchema = new mongoose.Schema({
-    title: String,
-    author: String,
-    url: String,
-    likes: Number
-})
+  title: String,
+  author: String,
+  url: String,
+  likes: Number,
+});
 
 blogSchema.set('toJSON', {
   transform: (document, returnedObject) => {
