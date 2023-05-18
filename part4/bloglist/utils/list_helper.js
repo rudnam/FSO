@@ -23,9 +23,28 @@ const mostBlogs = (blogs) => {
   };
 };
 
+const mostLikes = (blogs) => {
+  if (blogs.length === 0) return null;
+  const authorsDict = {};
+  const loopingFunct = (blog) => {
+    if (!authorsDict[blog.author]) {
+      authorsDict[blog.author] = 0;
+    }
+    authorsDict[blog.author] += blog.likes;
+  };
+  blogs.forEach(loopingFunct);
+  const reducer = (most, author) => (most[1] > author[1] ? most : author);
+  const authorMost = Object.entries(authorsDict).reduce(reducer);
+  return {
+    author: authorMost[0],
+    likes: authorMost[1],
+  };
+};
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
   mostBlogs,
+  mostLikes,
 };
