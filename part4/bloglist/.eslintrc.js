@@ -22,5 +22,6 @@ module.exports = {
     'no-unused-vars': 'off',
     'no-param-reassign': 'off',
     'no-underscore-dangle': 'off',
+    'import/no-extraneous-dependencies': 'off',
   },
 };
