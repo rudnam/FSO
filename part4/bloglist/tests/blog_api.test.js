@@ -101,6 +101,7 @@ describe('when there is initially some blogs saved', () => {
         .expect(400);
     });
   });
+
   describe('deletion of a blog', () => {
     test('succeeds with status code 200 when id is valid', async () => {
       const blogsAtStart = await helper.blogsInDb();
@@ -119,6 +120,27 @@ describe('when there is initially some blogs saved', () => {
       const titles = blogsAtEnd.map((r) => r.title);
 
       expect(titles).not.toContain(blogToDelete.title);
+    });
+  });
+
+  describe('updating of a blog', () => {
+    test('succeeds with status code 200 when id is valid', async () => {
+      const blogsAtStart = await helper.blogsInDb();
+      const blogToUpdate = blogsAtStart[0];
+
+      const updatedBlog = {
+        likes: 1,
+      };
+
+      await api
+        .put(`/api/blogs/${blogToUpdate.id}`)
+        .send(updatedBlog)
+        .expect(200);
+
+      const blogsAtEnd = await helper.blogsInDb();
+      const blogAfterEnd = blogsAtEnd.find((blog) => blog.id === blogToUpdate.id);
+
+      expect(blogAfterEnd.likes).toBe(1);
     });
   });
 });
