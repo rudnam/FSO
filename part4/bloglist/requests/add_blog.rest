@@ -5,8 +5,9 @@ POST http://localhost:3003/api/blogs/ HTTP/1.1
 content-type: application/json
 
 {
-  "title": "blog1",
-  "author": "author1",
-  "url": "randomurl.com",
-  "likes": 32
+  "title": "bldadg1",
+  "author": "authdor1",
+  "url": "randourl.com",
+  "likes": 2,
+  "user": "646b30e71e807f00c8e815b7"
 }
