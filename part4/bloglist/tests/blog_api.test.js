@@ -39,6 +39,29 @@ test('unique identifier property of the blog posts is named id', async () => {
   });
 });
 
+test('blog post is successfully created', async () => {
+  const newBlog = {
+    title: 'Title of a new Blog',
+    author: 'Authorino',
+    url: 'urlfornewblog.com/testing',
+    likes: 1,
+  };
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/);
+
+  const blogsAtEnd = await helper.blogsInDb();
+  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1);
+
+  const titles = blogsAtEnd.map((n) => n.title);
+  expect(titles).toContain(
+    'Title of a new Blog',
+  );
+});
+
 afterAll(async () => {
   await mongoose.connection.close();
 });
