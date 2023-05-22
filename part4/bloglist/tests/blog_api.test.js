@@ -62,6 +62,17 @@ test('blog post is successfully created', async () => {
   );
 });
 
+test('likes defaults to 0 when missing from the request', async () => {
+  const newBlog = {
+    title: 'Title of a new Blog',
+    author: 'Authorino',
+    url: 'urlfornewblog.com/testing',
+  };
+
+  const response = await api.post('/api/blogs').send(newBlog);
+  expect(response.body.likes).toBe(0);
+});
+
 afterAll(async () => {
   await mongoose.connection.close();
 });
