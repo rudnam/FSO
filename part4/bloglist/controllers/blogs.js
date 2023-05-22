@@ -7,6 +7,10 @@ blogsRouter.get('/', async (request, response) => {
 });
 
 blogsRouter.post('/', async (request, response) => {
+  if (!request.body.title || !request.body.url) {
+    response.status(400).json({ error: 'Title and URL are required' });
+    return;
+  }
   const blog = new Blog({
     ...request.body,
     likes: request.body.likes || 0,

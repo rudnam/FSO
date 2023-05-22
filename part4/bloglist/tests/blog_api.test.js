@@ -73,6 +73,34 @@ test('likes defaults to 0 when missing from the request', async () => {
   expect(response.body.likes).toBe(0);
 });
 
+describe('respond with 400 bad request', () => {
+  test('when title is missing from the request', async () => {
+    const newBlog = {
+      author: 'Authorino',
+      url: 'urlfornewblog.com/testing',
+      likes: 1,
+    };
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400);
+  });
+
+  test('when url is missing from the request', async () => {
+    const newBlog = {
+      title: 'Title of a new Blog',
+      author: 'Authorino',
+      likes: 1,
+    };
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400);
+  });
+});
+
 afterAll(async () => {
   await mongoose.connection.close();
 });
