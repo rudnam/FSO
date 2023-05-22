@@ -21,83 +21,85 @@ beforeEach(async () => {
   // }
 });
 
-test('correct amount of blogs are returned as json', async () => {
-  await api
-    .get('/api/blogs')
-    .expect(200)
-    .expect('Content-Type', /application\/json/);
-});
-
-test('unique identifier property of the blog posts is named id', async () => {
-  const response = await api.get('/api/blogs');
-
-  response.body.forEach((blog) => {
-    function returnId() {
-      return blog.id;
-    }
-    expect(returnId()).toBeDefined();
-  });
-});
-
-test('blog post is successfully created', async () => {
-  const newBlog = {
-    title: 'Title of a new Blog',
-    author: 'Authorino',
-    url: 'urlfornewblog.com/testing',
-    likes: 1,
-  };
-
-  await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(201)
-    .expect('Content-Type', /application\/json/);
-
-  const blogsAtEnd = await helper.blogsInDb();
-  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1);
-
-  const titles = blogsAtEnd.map((n) => n.title);
-  expect(titles).toContain(
-    'Title of a new Blog',
-  );
-});
-
-test('likes defaults to 0 when missing from the request', async () => {
-  const newBlog = {
-    title: 'Title of a new Blog',
-    author: 'Authorino',
-    url: 'urlfornewblog.com/testing',
-  };
-
-  const response = await api.post('/api/blogs').send(newBlog);
-  expect(response.body.likes).toBe(0);
-});
-
-describe('respond with 400 bad request', () => {
-  test('when title is missing from the request', async () => {
-    const newBlog = {
-      author: 'Authorino',
-      url: 'urlfornewblog.com/testing',
-      likes: 1,
-    };
-
+describe('when there is initially some blogs saved', () => {
+  test('correct amount of blogs are returned as json', async () => {
     await api
-      .post('/api/blogs')
-      .send(newBlog)
-      .expect(400);
+      .get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
   });
 
-  test('when url is missing from the request', async () => {
-    const newBlog = {
-      title: 'Title of a new Blog',
-      author: 'Authorino',
-      likes: 1,
-    };
+  test('unique identifier property of the blog posts is named id', async () => {
+    const response = await api.get('/api/blogs');
 
-    await api
-      .post('/api/blogs')
-      .send(newBlog)
-      .expect(400);
+    response.body.forEach((blog) => {
+      function returnId() {
+        return blog.id;
+      }
+      expect(returnId()).toBeDefined();
+    });
+  });
+
+  describe('addition of a new blog', () => {
+    test('succeeds with valid data', async () => {
+      const newBlog = {
+        title: 'Title of a new Blog',
+        author: 'Authorino',
+        url: 'urlfornewblog.com/testing',
+        likes: 1,
+      };
+
+      await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/);
+
+      const blogsAtEnd = await helper.blogsInDb();
+      expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1);
+
+      const titles = blogsAtEnd.map((n) => n.title);
+      expect(titles).toContain(
+        'Title of a new Blog',
+      );
+    });
+
+    test('likes defaults to 0 when missing from the request', async () => {
+      const newBlog = {
+        title: 'Title of a new Blog',
+        author: 'Authorino',
+        url: 'urlfornewblog.com/testing',
+      };
+
+      const response = await api.post('/api/blogs').send(newBlog);
+      expect(response.body.likes).toBe(0);
+    });
+
+    test('fails with status code 400 when title is missing from the request', async () => {
+      const newBlog = {
+        author: 'Authorino',
+        url: 'urlfornewblog.com/testing',
+        likes: 1,
+      };
+
+      await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(400);
+    });
+
+    test('fails with status code 400 when url is missing from the request', async () => {
+      const newBlog = {
+        title: 'Title of a new Blog',
+        author: 'Authorino',
+        likes: 1,
+      };
+
+      await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(400);
+    });
   });
 });
 
