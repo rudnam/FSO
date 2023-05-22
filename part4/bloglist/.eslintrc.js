@@ -24,5 +24,7 @@ module.exports = {
     'no-underscore-dangle': 'off',
     'import/no-extraneous-dependencies': 'off',
     'prefer-destructuring': 'off',
+    'no-restricted-syntax': 'off',
+    'no-await-in-loop': 'off',
   },
 };

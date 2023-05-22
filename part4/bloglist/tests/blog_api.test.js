@@ -1,34 +1,54 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const supertest = require('supertest');
+const jwt = require('jsonwebtoken');
 const helper = require('./test_helper');
 const app = require('../app');
 const Blog = require('../models/blog');
 const User = require('../models/user');
 
 const api = supertest(app);
+let token;
+
+beforeEach(async () => {
+  await User.deleteMany({});
+  await Blog.deleteMany({});
+
+  const saltRounds = 10;
+  for (const { username, name, password } of helper.initialUsers) {
+    const passwordHash = await bcrypt.hash(password, saltRounds);
+    const userObject = new User({
+      username,
+      name,
+      passwordHash,
+    });
+    await userObject.save();
+  }
+
+  // Log in to first user
+  const users = await helper.usersInDb();
+  const userForTesting = users[0];
+
+  token = jwt.sign(
+    userForTesting,
+    process.env.SECRET,
+    { expiresIn: 60 * 60 },
+  );
+  const decodedToken = jwt.verify(token, process.env.SECRET);
+  const user = await User.findById(decodedToken.id);
+
+  for (const blog of helper.initialBlogs) {
+    const blogObject = new Blog({
+      ...blog,
+      user: user.id,
+    });
+    const savedBlog = await blogObject.save();
+    user.blogs = user.blogs.concat(savedBlog.id);
+    await user.save();
+  }
+});
 
 describe('when there is initially some blogs saved', () => {
-  beforeEach(async () => {
-    await Blog.deleteMany({});
-    await User.deleteMany({});
-
-    const passwordHash = await bcrypt.hash('sekret', 10);
-    const user = new User({ username: 'testUser', passwordHash });
-    await user.save();
-
-    const blogObjects = helper.initialBlogs
-      .map((blog) => new Blog(blog));
-    const promiseArray = blogObjects.map((blog) => blog.save());
-    await Promise.all(promiseArray);
-
-    // // If the promises need to be executed in a particular order
-    // for (let blog of helper.initialBlogs) {
-    //   let blogObject = new Blog(blog)
-    //   await blogObject.save()
-    // }
-  });
-
   test('correct amount of blogs are returned as json', async () => {
     await api
       .get('/api/blogs')
@@ -49,19 +69,16 @@ describe('when there is initially some blogs saved', () => {
 
   describe('addition of a new blog', () => {
     test('succeeds with valid data', async () => {
-      const testUsers = await helper.usersInDb();
-      const testUser = testUsers[0];
-
       const newBlog = {
         title: 'Title of a new Blog',
         author: 'Authorino',
         url: 'urlfornewblog.com/testing',
         likes: 1,
-        user: testUser.id,
       };
 
       await api
         .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
         .send(newBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/);
@@ -76,17 +93,17 @@ describe('when there is initially some blogs saved', () => {
     });
 
     test('likes defaults to 0 when missing from the request', async () => {
-      const testUsers = await helper.usersInDb();
-      const testUser = testUsers[0];
-
       const newBlog = {
         title: 'Title of a new Blog',
         author: 'Authorino',
         url: 'urlfornewblog.com/testing',
-        user: testUser.id,
       };
 
-      const response = await api.post('/api/blogs').send(newBlog);
+      const response = await api
+        .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
+        .send(newBlog);
+
       expect(response.body.likes).toBe(0);
     });
 
@@ -99,6 +116,7 @@ describe('when there is initially some blogs saved', () => {
 
       await api
         .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
         .send(newBlog)
         .expect(400);
     });
@@ -112,8 +130,23 @@ describe('when there is initially some blogs saved', () => {
 
       await api
         .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
         .send(newBlog)
         .expect(400);
+    });
+
+    test('fails with status code 401 when token is not provided', async () => {
+      const newBlog = {
+        title: 'Title of a new Blog',
+        author: 'Authorino',
+        url: 'urlfornewblog.com/testing',
+        likes: 1,
+      };
+
+      await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(401);
     });
   });
 
@@ -122,8 +155,9 @@ describe('when there is initially some blogs saved', () => {
       const blogsAtStart = await helper.blogsInDb();
       const blogToDelete = blogsAtStart[0];
 
-      await api
+      const response = await api
         .delete(`/api/blogs/${blogToDelete.id}`)
+        .set('Authorization', `Bearer ${token}`)
         .expect(200);
 
       const blogsAtEnd = await helper.blogsInDb();

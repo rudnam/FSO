@@ -3,16 +3,35 @@ const User = require('../models/user');
 
 const initialBlogs = [
   {
-    title: 'Title of a Blog 1',
-    author: 'Blog Author 1',
-    url: 'randomurl.com/test',
+    title: 'Superuser\'s blog #1',
+    author: 'Superuser',
+    url: 'superuser.com/test',
     likes: 12,
   },
   {
-    title: 'Another title of a Blog 2',
-    author: 'Blog Author 2',
-    url: 'randomurl.com/test2',
+    title: 'Superuser\'s blog #2',
+    author: 'Superuser',
+    url: 'superuser.com/test2',
     likes: 9,
+  },
+  {
+    title: 'RandomGuy\'s cool blog',
+    author: 'RandomGuy',
+    url: 'randomguy.com/blog',
+    likes: 1,
+  },
+];
+
+const initialUsers = [
+  {
+    username: 'root',
+    name: 'Superuser',
+    password: 'notASafePassword',
+  },
+  {
+    username: 'user1',
+    name: 'RandomGuy',
+    password: 'RandomPassword',
   },
 ];
 
@@ -35,5 +54,5 @@ const usersInDb = async () => {
 };
 
 module.exports = {
-  initialBlogs, nonExistingId, blogsInDb, usersInDb,
+  initialBlogs, initialUsers, nonExistingId, blogsInDb, usersInDb,
 };
