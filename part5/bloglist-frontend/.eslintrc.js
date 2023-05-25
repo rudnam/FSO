@@ -17,6 +17,7 @@ module.exports = {
     'react',
   ],
   rules: {
-    'no-shadow': 'false',
+    'no-shadow': 'off',
+    'no-console': 'off',
   },
 };
