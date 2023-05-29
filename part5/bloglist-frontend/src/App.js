@@ -2,6 +2,8 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useState, useEffect } from 'react';
 import Blog from './components/Blog';
+import Notification from './components/Notification';
+import Error from './components/Error';
 import blogService from './services/blogs';
 import loginService from './services/login';
 
@@ -13,6 +15,8 @@ function App() {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
+  const [notifMessage, setNotifMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -41,6 +45,10 @@ function App() {
       setPassword('');
     } catch (exception) {
       console.error(exception);
+      setErrorMessage('wrong username or password');
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 3000);
     }
   };
 
@@ -60,14 +68,23 @@ function App() {
       setTitle('');
       setAuthor('');
       setUrl('');
+      setNotifMessage(`${title} by ${author} added`);
+      setTimeout(() => {
+        setNotifMessage(null);
+      }, 3000);
     } catch (exception) {
       console.error(exception);
+      setErrorMessage(exception);
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 3000);
     }
   };
 
   const loginForm = () => (
     <form onSubmit={handleLogin}>
       <h2>log in to application</h2>
+      <Error message={errorMessage} />
       <div>
         username
         <input
@@ -131,6 +148,7 @@ function App() {
         : (
           <div>
             <h2>blogs</h2>
+            <Notification message={notifMessage} />
             {user.name}
             {' '}
             logged in
