@@ -44,9 +44,9 @@ const Blog = ({
   return (
     <div className="blog" style={blogStyle}>
       {`${blog.title} ${blog.author}`}
-      <button style={hideWhenVisible} onClick={toggleVisibility}>view</button>
-      <button style={showWhenVisible} onClick={toggleVisibility}>hide</button>
-      <div style={showWhenVisible}>
+      <button className="viewBlog" style={hideWhenVisible} onClick={toggleVisibility}>view</button>
+      <button className="hideBlog" style={showWhenVisible} onClick={toggleVisibility}>hide</button>
+      <div className="blogDetails" style={showWhenVisible}>
         {blog.url}
         <br />
         {`likes ${blog.likes}`}
