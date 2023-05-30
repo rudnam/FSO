@@ -7,8 +7,3 @@ password: helloworld
 ### extra user:
 username: seconduser
 password: goodbyeworld
-
-### run tests
-```
-CI=true npm test
-```

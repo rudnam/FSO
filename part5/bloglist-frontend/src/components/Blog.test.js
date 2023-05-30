@@ -52,3 +52,28 @@ test('url and likes are shown on click', async () => {
   const blogDetails = container.querySelector('.blogDetails');
   expect(blogDetails).not.toHaveStyle('display: none');
 });
+
+test('if like button clicked twice, event handler is called twice', async () => {
+  const user = {
+    username: 'superuser',
+  };
+  const blog = {
+    title: 'An awesome blog',
+    author: 'Random Guy',
+    url: 'www.awesomeblogs.com/awesome-test-blog',
+    user: {
+      username: 'superuser',
+    },
+  };
+
+  const mockHandler = jest.fn();
+
+  const { container } = render(<Blog blog={blog} user={user} updateBlog={mockHandler} />);
+
+  const userTester = userEvent.setup();
+  const button = container.querySelector('.likeBlog');
+  await userTester.click(button);
+  await userTester.click(button);
+
+  expect(mockHandler.mock.calls).toHaveLength(2);
+});

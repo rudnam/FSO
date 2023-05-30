@@ -50,7 +50,7 @@ const Blog = ({
         {blog.url}
         <br />
         {`likes ${blog.likes}`}
-        <button onClick={likeBlog}>like</button>
+        <button className="likeBlog" onClick={likeBlog}>like</button>
         <br />
         {blog.user.name}
         <br />
