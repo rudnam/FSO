@@ -14,9 +14,6 @@ function App() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [url, setUrl] = useState('');
   const [notifMessage, setNotifMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
 
@@ -54,23 +51,14 @@ function App() {
     }
   };
 
-  const handleCreate = async (event) => {
-    event.preventDefault();
+  const addBlog = (blogObject) => {
     try {
-      const blog = await blogService.create({
-        title,
-        author,
-        url,
-      });
       blogService
-        .create(blog)
+        .create(blogObject)
         .then((returnedBlog) => {
           setBlogs(blogs.concat(returnedBlog));
         });
-      setTitle('');
-      setAuthor('');
-      setUrl('');
-      setNotifMessage(`${title} by ${author} added`);
+      setNotifMessage(`${blogObject.title} by ${blogObject.author} added`);
       setTimeout(() => {
         setNotifMessage(null);
       }, 3000);
@@ -114,13 +102,7 @@ function App() {
             </button>
             <Togglable buttonLabel="new blog">
               <BlogForm
-                handleSubmit={handleCreate}
-                handleTitleChange={({ target }) => setTitle(target.value)}
-                handleAuthorChange={({ target }) => setAuthor(target.value)}
-                handleUrlChange={({ target }) => setUrl(target.value)}
-                title={title}
-                author={author}
-                url={url}
+                createBlog={addBlog}
               />
             </Togglable>
             {blogs.map((blog) => <Blog key={blog.id} blog={blog} />)}
