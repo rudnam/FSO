@@ -38,4 +38,37 @@ describe('Blog app', function () {
       cy.get('html').should('not.contain', 'Matti Luukkainen logged in');
     });
   });
+
+  describe('when logged in', function () {
+    beforeEach(function () {
+      cy.get('#username').type('mluukkai');
+      cy.get('#password').type('salainen');
+      cy.get('#login-button').click();
+    });
+
+    it('a blog can be created', function () {
+      cy.contains('new blog').click();
+      cy.get('#input-title').type('The best blog in the world');
+      cy.get('#input-author').type('Random person');
+      cy.get('#input-url').type('www.randompersonblog.com');
+      cy.get('#create-blog-button').click();
+      cy.get('html').contains('The best blog in the world Random person');
+    });
+
+    describe('and a blog exists', function () {
+      beforeEach(function () {
+        cy.contains('new blog').click();
+        cy.get('#input-title').type('The best blog in the world');
+        cy.get('#input-author').type('Random person');
+        cy.get('#input-url').type('www.randompersonblog.com');
+        cy.get('#create-blog-button').click();
+      });
+
+      it('a blog can be liked', function () {
+        cy.contains('view').click();
+        cy.contains('like').click();
+        cy.get('html').contains('likes 1');
+      });
+    });
+  });
 });
