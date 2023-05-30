@@ -5,7 +5,7 @@
 /* eslint-disable react/function-component-definition */
 import { useState } from 'react';
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, updateBlog }) => {
   const [visible, setVisible] = useState(false);
 
   const hideWhenVisible = { display: visible ? 'none' : '' };
@@ -23,6 +23,14 @@ const Blog = ({ blog }) => {
     marginBottom: 5,
   };
 
+  const likeBlog = (event) => {
+    event.preventDefault();
+    updateBlog({
+      ...blog,
+      likes: blog.likes + 1,
+    });
+  };
+
   return (
     <div style={blogStyle}>
       {`${blog.title} ${blog.author}`}
@@ -32,7 +40,7 @@ const Blog = ({ blog }) => {
         {blog.url}
         <br />
         {`likes ${blog.likes}`}
-        <button onClick={() => console.log('like')}>like</button>
+        <button onClick={likeBlog}>like</button>
         <br />
         {blog.user.name}
       </div>
