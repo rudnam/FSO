@@ -20,5 +20,6 @@ module.exports = {
     'no-shadow': 'off',
     'no-console': 'off',
     'no-alert': 'off',
+    'import/no-extraneous-dependencies': 'off',
   },
 };
