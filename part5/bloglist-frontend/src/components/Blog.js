@@ -5,11 +5,16 @@
 /* eslint-disable react/function-component-definition */
 import { useState } from 'react';
 
-const Blog = ({ blog, updateBlog }) => {
+const Blog = ({
+  blog, updateBlog, deleteBlog, user,
+}) => {
   const [visible, setVisible] = useState(false);
+
+  const isOwner = user.username === blog.user.username;
 
   const hideWhenVisible = { display: visible ? 'none' : '' };
   const showWhenVisible = { display: visible ? '' : 'none' };
+  const hideWhenNotOwner = { display: !isOwner ? 'none' : '' };
 
   const toggleVisibility = () => {
     setVisible(!visible);
@@ -31,6 +36,11 @@ const Blog = ({ blog, updateBlog }) => {
     });
   };
 
+  const removeBlog = (event) => {
+    event.preventDefault();
+    deleteBlog(blog);
+  };
+
   return (
     <div style={blogStyle}>
       {`${blog.title} ${blog.author}`}
@@ -43,6 +53,8 @@ const Blog = ({ blog, updateBlog }) => {
         <button onClick={likeBlog}>like</button>
         <br />
         {blog.user.name}
+        <br />
+        <button style={hideWhenNotOwner} onClick={removeBlog}>remove</button>
       </div>
     </div>
   );

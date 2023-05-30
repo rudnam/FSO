@@ -2,6 +2,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useState, useEffect } from 'react';
 import Notification from './components/Notification';
+import Error from './components/Error';
 import LoginForm from './components/LoginForm';
 import BlogForm from './components/BlogForm';
 import Togglable from './components/Togglable';
@@ -85,6 +86,22 @@ function App() {
     }
   };
 
+  const deleteBlog = async (blogObject) => {
+    try {
+      if (window.confirm(`Remove blog ${blogObject.title} by ${blogObject.author}`)) {
+        await blogService.remove(blogObject.id);
+        setBlogs(blogs.filter((blog) => (
+          blog.id !== blogObject.id)));
+      }
+    } catch (exception) {
+      console.error(exception);
+      setErrorMessage('Unauthorized deletion');
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 3000);
+    }
+  };
+
   return (
     <div>
       {user === null
@@ -102,6 +119,7 @@ function App() {
           <div>
             <h2>blogs</h2>
             <Notification message={notifMessage} />
+            <Error message={errorMessage} />
             {user.name}
             {' '}
             logged in
@@ -119,7 +137,15 @@ function App() {
                 createBlog={addBlog}
               />
             </Togglable>
-            {blogs.map((blog) => <Blog key={blog.id} blog={blog} updateBlog={handleLike} />)}
+            {blogs.map((blog) => (
+              <Blog
+                key={blog.id}
+                blog={blog}
+                updateBlog={handleLike}
+                deleteBlog={deleteBlog}
+                user={user}
+              />
+            ))}
           </div>
         )}
     </div>

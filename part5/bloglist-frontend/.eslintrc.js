@@ -19,5 +19,6 @@ module.exports = {
   rules: {
     'no-shadow': 'off',
     'no-console': 'off',
+    'no-alert': 'off',
   },
 };
