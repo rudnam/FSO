@@ -8,6 +8,13 @@ describe('Blog app', function () {
       password: 'salainen',
     };
     cy.request('POST', 'http://localhost:3003/api/users/', user);
+    const user2 = {
+      name: 'Random user',
+      username: 'random',
+      password: 'helloworld',
+    };
+    cy.request('POST', 'http://localhost:3003/api/users/', user2);
+
     cy.visit('http://localhost:3000');
   });
 
@@ -68,6 +75,21 @@ describe('Blog app', function () {
         cy.contains('view').click();
         cy.contains('like').click();
         cy.get('html').contains('likes 1');
+      });
+
+      it('and creator, a blog can be deleted', function () {
+        cy.contains('view').click();
+        cy.contains('remove').click();
+        cy.get('html').should('not.contain', 'The best blog in the world Random person');
+      });
+
+      it('and not creator, a blog cannot be deleted', function () {
+        cy.contains('logout').click();
+        cy.get('#username').type('random');
+        cy.get('#password').type('helloworld');
+        cy.get('#login-button').click();
+        cy.contains('view').click();
+        cy.get('.remove-blog-button').should('have.css', 'display', 'none');
       });
     });
   });
