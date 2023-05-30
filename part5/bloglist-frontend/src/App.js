@@ -19,7 +19,7 @@ function App() {
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
-  }, []);
+  }, [JSON.stringify(blogs)]);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser');
@@ -51,13 +51,10 @@ function App() {
     }
   };
 
-  const addBlog = (blogObject) => {
+  const addBlog = async (blogObject) => {
     try {
-      blogService
-        .create(blogObject)
-        .then((returnedBlog) => {
-          setBlogs(blogs.concat(returnedBlog));
-        });
+      const blog = await blogService.create(blogObject);
+      setBlogs(blogs.concat(blog));
       setNotifMessage(`${blogObject.title} by ${blogObject.author} added`);
       setTimeout(() => {
         setNotifMessage(null);
