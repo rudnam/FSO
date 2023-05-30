@@ -48,9 +48,7 @@ describe('Blog app', function () {
 
   describe('when logged in', function () {
     beforeEach(function () {
-      cy.get('#username').type('mluukkai');
-      cy.get('#password').type('salainen');
-      cy.get('#login-button').click();
+      cy.login({ username: 'mluukkai', password: 'salainen' });
     });
 
     it('a blog can be created', function () {
@@ -65,10 +63,11 @@ describe('Blog app', function () {
     describe('and a blog exists', function () {
       beforeEach(function () {
         cy.contains('new blog').click();
-        cy.get('#input-title').type('The best blog in the world');
-        cy.get('#input-author').type('Random person');
-        cy.get('#input-url').type('www.randompersonblog.com');
-        cy.get('#create-blog-button').click();
+        cy.createNote({
+          title: 'The best blog in the world',
+          author: 'Random person',
+          url: 'www.randompersonblog.com',
+        });
       });
 
       it('a blog can be liked', function () {
@@ -90,6 +89,44 @@ describe('Blog app', function () {
         cy.get('#login-button').click();
         cy.contains('view').click();
         cy.get('.remove-blog-button').should('have.css', 'display', 'none');
+      });
+    });
+
+    describe('and several blogs exist', function () {
+      beforeEach(function () {
+        const blogs = [
+          {
+            title: 'Random blog 1',
+            author: 'Random author 1',
+            url: 'randomurl.com/blog1',
+          }, {
+            title: 'Random blog 2',
+            author: 'Random author 2',
+            url: 'randomurl.com/blog2',
+          }, {
+            title: 'Random blog 3',
+            author: 'Random author 3',
+            url: 'randomurl.com/blog3',
+          }];
+        blogs.forEach((blog) => {
+          cy.createNote(blog);
+        });
+      });
+
+      it('blogs are ordered with most likes being first', function () {
+        cy.contains('Random blog 1').find('.view-blog-button').click();
+        cy.contains('Random blog 2').find('.view-blog-button').click();
+        cy.contains('Random blog 3').find('.view-blog-button').click();
+
+        cy.contains('Random blog 3').find('.like-blog-button').click();
+        cy.contains('Random blog 3').find('.like-blog-button').click();
+        cy.contains('Random blog 3').find('.like-blog-button').click();
+        cy.contains('Random blog 1').find('.like-blog-button').click();
+        cy.contains('Random blog 1').find('.like-blog-button').click();
+        cy.contains('Random blog 2').find('.like-blog-button').click();
+
+        cy.get('.blog').eq(0).should('contain', 'Random blog 3');
+        cy.get('.blog').eq(1).should('contain', 'Random blog 1');
       });
     });
   });
