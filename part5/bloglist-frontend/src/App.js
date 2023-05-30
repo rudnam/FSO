@@ -18,7 +18,7 @@ function App() {
   const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
+    blogService.getAll().then((blogs) => setBlogs(blogs.sort((a, b) => b.likes - a.likes)));
   }, [JSON.stringify(blogs)]);
 
   useEffect(() => {
@@ -76,7 +76,6 @@ function App() {
           ? updatedBlog
           : blog
       )));
-      console.log(updatedBlog, 'updated');
     } catch (exception) {
       console.error(exception);
       setErrorMessage(exception);
