@@ -16,7 +16,7 @@ function Error({ message }) {
   }
 
   return (
-    <div style={errorStyle}>
+    <div className="error-message" style={errorStyle}>
       {message}
     </div>
   );
