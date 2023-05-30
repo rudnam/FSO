@@ -1,7 +1,5 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable no-undef */
 /* eslint-disable react/jsx-filename-extension */
-/* eslint-disable react/jsx-no-undef */
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';

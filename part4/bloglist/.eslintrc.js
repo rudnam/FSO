@@ -26,5 +26,6 @@ module.exports = {
     'prefer-destructuring': 'off',
     'no-restricted-syntax': 'off',
     'no-await-in-loop': 'off',
+    'global-require': 'off',
   },
 };
