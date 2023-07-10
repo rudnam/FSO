@@ -2,7 +2,6 @@ import { useSelector } from "react-redux"
 
 const Notification = () => {
   const notification = useSelector(state => {
-    console.log(JSON.parse(JSON.stringify(state)))
     return state.notification
   })
   const style = {
