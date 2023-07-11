@@ -4,6 +4,7 @@ import { setNotification, removeNotification } from "../reducers/notificationRed
 
 const AnecdoteList = () => {
   const anecdotes = useSelector(state => {
+    console.log(JSON.parse(JSON.stringify(state)))
     return state.anecdotes.filter(anecdote => anecdote.content.toLowerCase().includes(state.filter))
   })
   const dispatch = useDispatch()
