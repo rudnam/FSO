@@ -1,4 +1,6 @@
-const UserRow = ({ name, blogCount }) => {
+import { Link } from "react-router-dom";
+
+const UserRow = ({ user }) => {
   const style = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -9,8 +11,10 @@ const UserRow = ({ name, blogCount }) => {
 
   return (
     <tr className="user-row" style={style}>
-      <td>{name}</td>
-      <td>{blogCount}</td>
+      <td>
+        <Link to={`/users/${user.id}`}>{user.name}</Link>
+      </td>
+      <td>{user.blogs.length}</td>
     </tr>
   );
 };

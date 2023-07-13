@@ -17,11 +17,7 @@ const UserList = () => {
           {[...users]
             .sort((a, b) => b.blogs.length - a.blogs.length)
             .map((user) => (
-              <UserRow
-                key={user.id}
-                name={user.name}
-                blogCount={user.blogs.length}
-              />
+              <UserRow key={user.id} user={user} />
             ))}
         </tbody>
       </table>

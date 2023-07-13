@@ -1,6 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useMatch } from "react-router-dom";
 import BlogForm from "./components/BlogForm";
 import BlogList from "./components/BlogList";
 import Error from "./components/Error";
@@ -8,13 +8,15 @@ import LoginForm from "./components/LoginForm";
 import Notification from "./components/Notification";
 import Togglable from "./components/Togglable";
 import UserList from "./components/UserList";
+import User from "./components/User";
 import { initializeBlogs } from "./reducers/blogReducer";
 import { initializeUsers } from "./reducers/userReducer";
 import { setCurrentUser } from "./reducers/currentUserReducer";
 
 function App() {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.currentUser);
+  const currentUser = useSelector((state) => state.currentUser);
+  const [foundUser, setFoundUser] = useState(null);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
@@ -29,16 +31,25 @@ function App() {
     dispatch(initializeUsers());
   }, []);
 
+  const users = useSelector((state) => state.users);
+  const match = useMatch("/users/:id");
+  useEffect(() => {
+    if (match && users.length > 0) {
+      const user = users.find((user) => user.id === match.params.id);
+      setFoundUser(user);
+    }
+  }, [match, users]);
+
   return (
     <div>
-      {user === null ? (
+      {currentUser === null ? (
         <LoginForm />
       ) : (
         <div>
           <h2>blogs</h2>
           <Notification />
           <Error />
-          {user.name} logged in
+          {currentUser.name} logged in
           <button
             type="button"
             onClick={() => {
@@ -61,6 +72,7 @@ function App() {
               }
             />
             <Route path="/users" element={<UserList />} />
+            <Route path="/users/:id" element={<User user={foundUser} />} />
           </Routes>
         </div>
       )}
