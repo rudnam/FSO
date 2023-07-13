@@ -18,5 +18,12 @@ module.exports = {
     "no-alert": "off",
     "import/no-extraneous-dependencies": "off",
     "func-names": "off",
+    "no-unused-vars": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-filename-extension": [1, { extensions: [".js", ".jsx"] }],
+    "react/function-component-definition": "off",
+    "react/button-has-type": "off",
+    "react/prop-types": "off",
+    "react/destructuring-assignment": "off",
   },
 };

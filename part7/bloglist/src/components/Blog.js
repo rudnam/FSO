@@ -1,8 +1,3 @@
-/* eslint-disable react/button-has-type */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/jsx-filename-extension */
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/function-component-definition */
 import { useState } from "react";
 
 const Blog = ({ blog, updateBlog, deleteBlog, user }) => {

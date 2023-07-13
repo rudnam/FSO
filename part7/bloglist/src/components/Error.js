@@ -1,8 +1,8 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/jsx-filename-extension */
-/* eslint-disable react/react-in-jsx-scope */
-function Error({ message }) {
-  const errorStyle = {
+import { useSelector } from "react-redux";
+
+function Error() {
+  const errorMessage = useSelector((state) => state.errorMessage);
+  const style = {
     color: "red",
     background: "lightgrey",
     fontSize: 20,
@@ -11,14 +11,9 @@ function Error({ message }) {
     padding: 10,
     marginBottom: 10,
   };
-  if (message === null) {
-    return null;
-  }
 
   return (
-    <div className="error-message" style={errorStyle}>
-      {message}
-    </div>
+    <div>{errorMessage ? <div style={style}>{errorMessage}</div> : null}</div>
   );
 }
 

@@ -1,9 +1,3 @@
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/button-has-type */
-/* eslint-disable react/function-component-definition */
-/* eslint-disable react/jsx-filename-extension */
-/* eslint-disable react/react-in-jsx-scope */
 import { useState } from "react";
 import PropTypes from "prop-types";
 

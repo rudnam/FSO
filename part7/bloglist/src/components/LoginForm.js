@@ -1,6 +1,3 @@
-/* eslint-disable react/function-component-definition */
-/* eslint-disable react/jsx-filename-extension */
-/* eslint-disable react/react-in-jsx-scope */
 import PropTypes from "prop-types";
 import Error from "./Error";
 
@@ -10,7 +7,6 @@ const LoginForm = ({
   handlePasswordChange,
   username,
   password,
-  errorMessage,
 }) => {
   LoginForm.propTypes = {
     handleSubmit: PropTypes.func.isRequired,
@@ -18,17 +14,12 @@ const LoginForm = ({
     handlePasswordChange: PropTypes.func.isRequired,
     username: PropTypes.string.isRequired,
     password: PropTypes.string.isRequired,
-    errorMessage: PropTypes.string,
-  };
-
-  LoginForm.defaultProps = {
-    errorMessage: "",
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <h2>log in to application</h2>
-      <Error message={errorMessage} />
+      <Error />
       <div>
         username
         <input

@@ -1,7 +1,3 @@
-/* eslint-disable react/function-component-definition */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/jsx-filename-extension */
-/* eslint-disable react/react-in-jsx-scope */
 import { useState } from "react";
 
 const BlogForm = ({ createBlog }) => {

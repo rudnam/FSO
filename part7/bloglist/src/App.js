@@ -1,22 +1,22 @@
-/* eslint-disable react/jsx-filename-extension */
-/* eslint-disable react/react-in-jsx-scope */
-import { useState, useEffect } from "react";
-import Notification from "./components/Notification";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import Blog from "./components/Blog";
+import BlogForm from "./components/BlogForm";
 import Error from "./components/Error";
 import LoginForm from "./components/LoginForm";
-import BlogForm from "./components/BlogForm";
+import Notification from "./components/Notification";
 import Togglable from "./components/Togglable";
-import Blog from "./components/Blog";
+import { setNotification } from "./reducers/notificationReducer";
+import { setErrorMessage } from "./reducers/errorReducer";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 
 function App() {
+  const dispatch = useDispatch();
   const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
-  const [notifMessage, setNotifMessage] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
     blogService
@@ -48,10 +48,7 @@ function App() {
       setPassword("");
     } catch (exception) {
       console.error(exception);
-      setErrorMessage("wrong username or password");
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 3000);
+      dispatch(setErrorMessage("wrong username or password", 3));
     }
   };
 
@@ -59,16 +56,12 @@ function App() {
     try {
       const blog = await blogService.create(blogObject);
       setBlogs(blogs.concat(blog));
-      setNotifMessage(`${blogObject.title} by ${blogObject.author} added`);
-      setTimeout(() => {
-        setNotifMessage(null);
-      }, 3000);
+      dispatch(
+        setNotification(`${blogObject.title} by ${blogObject.author} added`, 3)
+      );
     } catch (exception) {
       console.error(exception);
-      setErrorMessage(exception);
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 3000);
+      dispatch(setErrorMessage(exception, 3));
     }
   };
 
@@ -80,10 +73,7 @@ function App() {
       );
     } catch (exception) {
       console.error(exception);
-      setErrorMessage(exception);
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 3000);
+      dispatch(setErrorMessage(exception, 3));
     }
   };
 
@@ -99,10 +89,7 @@ function App() {
       }
     } catch (exception) {
       console.error(exception);
-      setErrorMessage("Unauthorized deletion");
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 3000);
+      dispatch(setErrorMessage("Unauthorized deletion", 3));
     }
   };
 
@@ -115,13 +102,12 @@ function App() {
           handleUsernameChange={({ target }) => setUsername(target.value)}
           handlePasswordChange={({ target }) => setPassword(target.value)}
           handleSubmit={handleLogin}
-          errorMessage={errorMessage}
         />
       ) : (
         <div>
           <h2>blogs</h2>
-          <Notification message={notifMessage} />
-          <Error message={errorMessage} />
+          <Notification />
+          <Error />
           {user.name} logged in
           <button
             type="button"
