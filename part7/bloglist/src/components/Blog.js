@@ -3,18 +3,16 @@
 /* eslint-disable react/jsx-filename-extension */
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/function-component-definition */
-import { useState } from 'react';
+import { useState } from "react";
 
-const Blog = ({
-  blog, updateBlog, deleteBlog, user,
-}) => {
+const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
   const [visible, setVisible] = useState(false);
 
   const isOwner = user.username === blog.user.username;
 
-  const hideWhenVisible = { display: visible ? 'none' : '' };
-  const showWhenVisible = { display: visible ? '' : 'none' };
-  const hideWhenNotOwner = { display: !isOwner ? 'none' : '' };
+  const hideWhenVisible = { display: visible ? "none" : "" };
+  const showWhenVisible = { display: visible ? "" : "none" };
+  const hideWhenNotOwner = { display: !isOwner ? "none" : "" };
 
   const toggleVisibility = () => {
     setVisible(!visible);
@@ -23,7 +21,7 @@ const Blog = ({
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
-    border: 'solid',
+    border: "solid",
     borderWidth: 1,
     marginBottom: 5,
   };
@@ -44,17 +42,37 @@ const Blog = ({
   return (
     <div className="blog" style={blogStyle}>
       {`${blog.title} ${blog.author}`}
-      <button className="view-blog-button" style={hideWhenVisible} onClick={toggleVisibility}>view</button>
-      <button className="hide-blog-button" style={showWhenVisible} onClick={toggleVisibility}>hide</button>
+      <button
+        className="view-blog-button"
+        style={hideWhenVisible}
+        onClick={toggleVisibility}
+      >
+        view
+      </button>
+      <button
+        className="hide-blog-button"
+        style={showWhenVisible}
+        onClick={toggleVisibility}
+      >
+        hide
+      </button>
       <div className="blog-details" style={showWhenVisible}>
         {blog.url}
         <br />
         {`likes ${blog.likes}`}
-        <button className="like-blog-button" onClick={likeBlog}>like</button>
+        <button className="like-blog-button" onClick={likeBlog}>
+          like
+        </button>
         <br />
         {blog.user.name}
         <br />
-        <button className="remove-blog-button" style={hideWhenNotOwner} onClick={removeBlog}>remove</button>
+        <button
+          className="remove-blog-button"
+          style={hideWhenNotOwner}
+          onClick={removeBlog}
+        >
+          remove
+        </button>
       </div>
     </div>
   );

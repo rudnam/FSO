@@ -3,10 +3,10 @@
 /* eslint-disable react/react-in-jsx-scope */
 function Error({ message }) {
   const errorStyle = {
-    color: 'red',
-    background: 'lightgrey',
+    color: "red",
+    background: "lightgrey",
     fontSize: 20,
-    borderStyle: 'solid',
+    borderStyle: "solid",
     borderRadius: 5,
     padding: 10,
     marginBottom: 10,

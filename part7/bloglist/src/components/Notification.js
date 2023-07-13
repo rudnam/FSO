@@ -3,10 +3,10 @@
 /* eslint-disable react/prop-types */
 function Notification({ message }) {
   const notifStyle = {
-    color: 'green',
-    background: 'lightgrey',
+    color: "green",
+    background: "lightgrey",
     fontSize: 20,
-    borderStyle: 'solid',
+    borderStyle: "solid",
     borderRadius: 5,
     padding: 10,
     marginBottom: 10,
@@ -15,11 +15,7 @@ function Notification({ message }) {
     return null;
   }
 
-  return (
-    <div style={notifStyle}>
-      {message}
-    </div>
-  );
+  return <div style={notifStyle}>{message}</div>;
 }
 
 export default Notification;

@@ -2,14 +2,12 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-filename-extension */
 /* eslint-disable react/react-in-jsx-scope */
-import { useState } from 'react';
+import { useState } from "react";
 
-const BlogForm = ({
-  createBlog,
-}) => {
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [url, setUrl] = useState('');
+const BlogForm = ({ createBlog }) => {
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [url, setUrl] = useState("");
 
   const addBlog = (event) => {
     event.preventDefault();
@@ -18,9 +16,9 @@ const BlogForm = ({
       author,
       url,
     });
-    setTitle('');
-    setAuthor('');
-    setUrl('');
+    setTitle("");
+    setAuthor("");
+    setUrl("");
   };
   return (
     <div>
@@ -53,7 +51,9 @@ const BlogForm = ({
             onChange={({ target }) => setUrl(target.value)}
           />
         </div>
-        <button id="create-blog-button" type="submit">create</button>
+        <button id="create-blog-button" type="submit">
+          create
+        </button>
       </form>
     </div>
   );

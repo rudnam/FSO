@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios from "axios";
 
-const baseUrl = '/api/blogs';
+const baseUrl = "/api/blogs";
 
 let token = null;
 
@@ -35,5 +35,9 @@ const remove = (id) => {
 };
 
 export default {
-  getAll, create, update, setToken, remove,
+  getAll,
+  create,
+  update,
+  setToken,
+  remove,
 };

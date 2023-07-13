@@ -1,8 +1,8 @@
 /* eslint-disable react/function-component-definition */
 /* eslint-disable react/jsx-filename-extension */
 /* eslint-disable react/react-in-jsx-scope */
-import PropTypes from 'prop-types';
-import Error from './Error';
+import PropTypes from "prop-types";
+import Error from "./Error";
 
 const LoginForm = ({
   handleSubmit,
@@ -22,7 +22,7 @@ const LoginForm = ({
   };
 
   LoginForm.defaultProps = {
-    errorMessage: '',
+    errorMessage: "",
   };
 
   return (
@@ -49,7 +49,9 @@ const LoginForm = ({
           onChange={handlePasswordChange}
         />
       </div>
-      <button id="login-button" type="submit">login</button>
+      <button id="login-button" type="submit">
+        login
+      </button>
     </form>
   );
 };
