@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { createBlog } from "../reducers/blogReducer";
+import { createBlog } from "../reducers/blogsReducer";
 import { setNotification } from "../reducers/notificationReducer";
 import { setErrorMessage } from "../reducers/errorReducer";
 

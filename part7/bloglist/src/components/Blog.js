@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { updateBlog, deleteBlog } from "../reducers/blogReducer";
+import { updateBlog, deleteBlog } from "../reducers/blogsReducer";
 import { setErrorMessage } from "../reducers/errorReducer";
 
 const Blog = ({ blog, user }) => {

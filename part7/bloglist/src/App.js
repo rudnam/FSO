@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Blog from "./components/Blog";
 import BlogForm from "./components/BlogForm";
@@ -6,7 +6,7 @@ import Error from "./components/Error";
 import LoginForm from "./components/LoginForm";
 import Notification from "./components/Notification";
 import Togglable from "./components/Togglable";
-import { initializeBlogs } from "./reducers/blogReducer";
+import { initializeBlogs } from "./reducers/blogsReducer";
 import { setUser } from "./reducers/userReducer";
 
 function App() {
