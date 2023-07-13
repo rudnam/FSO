@@ -1,29 +1,32 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Blog from "./components/Blog";
+import { Route, Routes } from "react-router-dom";
 import BlogForm from "./components/BlogForm";
+import BlogList from "./components/BlogList";
 import Error from "./components/Error";
 import LoginForm from "./components/LoginForm";
 import Notification from "./components/Notification";
 import Togglable from "./components/Togglable";
-import { initializeBlogs } from "./reducers/blogsReducer";
-import { setUser } from "./reducers/userReducer";
+import UserList from "./components/UserList";
+import { initializeBlogs } from "./reducers/blogReducer";
+import { initializeUsers } from "./reducers/userReducer";
+import { setCurrentUser } from "./reducers/currentUserReducer";
 
 function App() {
-  const blogs = useSelector((state) => state.blogs);
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.currentUser);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
-      dispatch(setUser(user));
+      dispatch(setCurrentUser(user));
     }
   }, []);
 
   useEffect(() => {
     dispatch(initializeBlogs());
+    dispatch(initializeUsers());
   }, []);
 
   return (
@@ -45,14 +48,20 @@ function App() {
           >
             logout
           </button>
-          <Togglable buttonLabel="new blog">
-            <BlogForm />
-          </Togglable>
-          {blogs && blogs.length > 0
-            ? [...blogs]
-                .sort((a, b) => b.likes - a.likes)
-                .map((blog) => <Blog key={blog.id} blog={blog} user={user} />)
-            : null}
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <div>
+                  <Togglable buttonLabel="new blog">
+                    <BlogForm />
+                  </Togglable>
+                  <BlogList />
+                </div>
+              }
+            />
+            <Route path="/users" element={<UserList />} />
+          </Routes>
         </div>
       )}
     </div>

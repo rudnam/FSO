@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { updateBlog, deleteBlog } from "../reducers/blogReducer";
 import { setErrorMessage } from "../reducers/errorReducer";
 
-const Blog = ({ blog, user }) => {
+const User = ({ blog, user }) => {
   const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
 
@@ -86,4 +86,4 @@ const Blog = ({ blog, user }) => {
   );
 };
 
-export default Blog;
+export default User;

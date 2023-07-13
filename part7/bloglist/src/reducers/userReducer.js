@@ -1,24 +1,38 @@
 import { createSlice } from "@reduxjs/toolkit";
-import blogService from "../services/blogs";
+import userService from "../services/users";
 
 const userSlice = createSlice({
-  name: "user",
-  initialState: null,
+  name: "users",
+  initialState: [],
   reducers: {
-    updateUserInState(_state, action) {
+    addUser(state, action) {
+      state.push(action.payload);
+    },
+    setUsers(state, action) {
       return action.payload;
     },
-    removeUserInState(_state, action) {
-      return null;
+    removeUser(state, action) {
+      const { id } = action.payload;
+      return state.filter((user) => user.id !== id);
     },
   },
 });
 
-export const { updateUserInState, removeUserInState } = userSlice.actions;
+export const { addUser, setUsers, removeUser } = userSlice.actions;
 
-export const setUser = (user) => async (dispatch) => {
-  blogService.setToken(user.token);
-  dispatch(updateUserInState(user));
+export const initializeUsers = () => async (dispatch) => {
+  const users = await userService.getAll();
+  dispatch(setUsers(users));
+};
+
+export const createUser = (userObject) => async (dispatch) => {
+  const newUser = await userService.create(userObject);
+  dispatch(addUser(newUser));
+};
+
+export const deleteUser = (userObject) => async (dispatch) => {
+  await userService.remove(userObject.id);
+  dispatch(removeUser(userObject));
 };
 
 export default userSlice.reducer;

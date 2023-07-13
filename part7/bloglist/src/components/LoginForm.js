@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setErrorMessage } from "../reducers/errorReducer";
-import { setUser } from "../reducers/userReducer";
+import { setCurrentUser } from "../reducers/currentUserReducer";
 import loginService from "../services/login";
 import Error from "./Error";
 
@@ -18,7 +18,7 @@ const LoginForm = () => {
       });
 
       window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
-      dispatch(setUser(user));
+      dispatch(setCurrentUser(user));
       setUsername("");
       setPassword("");
     } catch (exception) {
