@@ -1,28 +1,23 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Blog from "./components/Blog";
 import BlogForm from "./components/BlogForm";
 import Error from "./components/Error";
 import LoginForm from "./components/LoginForm";
 import Notification from "./components/Notification";
 import Togglable from "./components/Togglable";
-import { setNotification } from "./reducers/notificationReducer";
 import { setErrorMessage } from "./reducers/errorReducer";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
+import { initializeBlogs } from "./reducers/blogReducer";
 
 function App() {
-  const dispatch = useDispatch();
-  const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    blogService
-      .getAll()
-      .then((blogs) => setBlogs(blogs.sort((a, b) => b.likes - a.likes)));
-  }, [JSON.stringify(blogs)]);
+  const blogs = useSelector((state) => state.blogs);
+  const dispatch = useDispatch();
+  console.log(blogs);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
@@ -31,6 +26,10 @@ function App() {
       setUser(user);
       blogService.setToken(user.token);
     }
+  }, []);
+
+  useEffect(() => {
+    dispatch(initializeBlogs());
   }, []);
 
   const handleLogin = async (event) => {
@@ -49,47 +48,6 @@ function App() {
     } catch (exception) {
       console.error(exception);
       dispatch(setErrorMessage("wrong username or password", 3));
-    }
-  };
-
-  const addBlog = async (blogObject) => {
-    try {
-      const blog = await blogService.create(blogObject);
-      setBlogs(blogs.concat(blog));
-      dispatch(
-        setNotification(`${blogObject.title} by ${blogObject.author} added`, 3)
-      );
-    } catch (exception) {
-      console.error(exception);
-      dispatch(setErrorMessage(exception, 3));
-    }
-  };
-
-  const handleLike = async (blogObject) => {
-    try {
-      const updatedBlog = await blogService.update(blogObject.id, blogObject);
-      setBlogs(
-        blogs.map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog))
-      );
-    } catch (exception) {
-      console.error(exception);
-      dispatch(setErrorMessage(exception, 3));
-    }
-  };
-
-  const deleteBlog = async (blogObject) => {
-    try {
-      if (
-        window.confirm(
-          `Remove blog ${blogObject.title} by ${blogObject.author}`
-        )
-      ) {
-        await blogService.remove(blogObject.id);
-        setBlogs(blogs.filter((blog) => blog.id !== blogObject.id));
-      }
-    } catch (exception) {
-      console.error(exception);
-      dispatch(setErrorMessage("Unauthorized deletion", 3));
     }
   };
 
@@ -119,17 +77,13 @@ function App() {
             logout
           </button>
           <Togglable buttonLabel="new blog">
-            <BlogForm createBlog={addBlog} />
+            <BlogForm />
           </Togglable>
-          {blogs.map((blog) => (
-            <Blog
-              key={blog.id}
-              blog={blog}
-              updateBlog={handleLike}
-              deleteBlog={deleteBlog}
-              user={user}
-            />
-          ))}
+          {blogs && blogs.length > 0
+            ? [...blogs]
+                .sort((a, b) => b.likes - a.likes)
+                .map((blog) => <Blog key={blog.id} blog={blog} user={user} />)
+            : null}
         </div>
       )}
     </div>

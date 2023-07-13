@@ -1,6 +1,10 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { updateBlog, deleteBlog } from "../reducers/blogReducer";
+import { setErrorMessage } from "../reducers/errorReducer";
 
-const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
+const Blog = ({ blog, user }) => {
+  const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
 
   const isOwner = user.username === blog.user.username;
@@ -22,16 +26,25 @@ const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
   };
 
   const likeBlog = (event) => {
-    event.preventDefault();
-    updateBlog({
-      ...blog,
-      likes: blog.likes + 1,
-    });
+    try {
+      event.preventDefault();
+      dispatch(updateBlog({ ...blog, likes: blog.likes + 1 }));
+    } catch (exception) {
+      console.error(exception);
+      dispatch(setErrorMessage(exception, 3));
+    }
   };
 
   const removeBlog = (event) => {
-    event.preventDefault();
-    deleteBlog(blog);
+    try {
+      event.preventDefault();
+      if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+        dispatch(deleteBlog(blog));
+      }
+    } catch (exception) {
+      console.error(exception);
+      dispatch(setErrorMessage("Unauthorized deletion", 3));
+    }
   };
 
   return (
