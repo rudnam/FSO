@@ -13,6 +13,7 @@ import User from "./components/User";
 import { initializeBlogs } from "./reducers/blogReducer";
 import { initializeUsers } from "./reducers/userReducer";
 import { setCurrentUser } from "./reducers/currentUserReducer";
+import Menu from "./components/Menu";
 
 function App() {
   const dispatch = useDispatch();
@@ -57,6 +58,7 @@ function App() {
         <LoginForm />
       ) : (
         <div>
+          <Menu user={currentUser} />
           <h2>blogs</h2>
           <Notification />
           <Error />
