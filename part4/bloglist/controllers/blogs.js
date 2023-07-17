@@ -5,8 +5,7 @@ const Blog = require('../models/blog');
 const User = require('../models/user');
 
 blogsRouter.get('/', async (request, response) => {
-  const blogs = await Blog
-    .find({}).populate('user', { username: 1, name: 1 });
+  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 });
   response.json(blogs);
 });
 
@@ -27,6 +26,7 @@ blogsRouter.post('/', userExtractor, async (request, response) => {
     ...request.body,
     likes: request.body.likes || 0,
     user: user.id,
+    comments: [],
   });
 
   const savedBlog = await blog.save();
@@ -48,7 +48,11 @@ blogsRouter.delete('/:id', userExtractor, async (request, response) => {
     response.status(400).json({ error: 'user missing' });
   } else if (!blog) {
     response.status(400).json({ error: 'blog missing' });
-  } else if (!user.id || !blog.user || user.id.toString() !== blog.user.toString()) {
+  } else if (
+    !user.id
+    || !blog.user
+    || user.id.toString() !== blog.user.toString()
+  ) {
     response.status(401).json({
       error: 'Unauthorized deletion',
       user,
@@ -64,8 +68,22 @@ blogsRouter.put('/:id', async (request, response) => {
   const blog = {
     likes: request.body.likes,
   };
-  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true });
+  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {
+    new: true,
+  });
   response.status(200).json(updatedBlog);
+});
+
+blogsRouter.post('/:id/comments', async (request, response) => {
+  if (!request.body.comment) {
+    response.status(400).json({ error: 'Comment should not be empty' });
+    return;
+  }
+  const blog = await Blog.findById(request.params.id);
+  blog.comments = blog.comments.concat(request.body.comment);
+  const savedBlog = await blog.save();
+  console.log(savedBlog);
+  response.status(200).json(savedBlog);
 });
 
 module.exports = blogsRouter;

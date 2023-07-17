@@ -32,6 +32,13 @@ const Blog = ({ blog }) => {
       </button>
       <br />
       {`added by ${blog.user.name}`}
+      <br />
+      <h2>comments</h2>
+      <ul>
+        {blog.comments.map((comment) => (
+          <li>{comment}</li>
+        ))}
+      </ul>
     </div>
   );
 };

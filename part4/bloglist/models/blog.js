@@ -5,7 +5,8 @@ mongoose.set('strictQuery', false);
 
 const url = config.MONGODB_URI;
 // console.log('connecting to', url);
-mongoose.connect(url)
+mongoose
+  .connect(url)
   .then((result) => {
     // console.log('connected to MongoDB');
   })
@@ -22,6 +23,11 @@ const blogSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
+  comments: [
+    {
+      type: String,
+    },
+  ],
 });
 
 blogSchema.set('toJSON', {
