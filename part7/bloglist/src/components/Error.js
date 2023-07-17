@@ -2,18 +2,15 @@ import { useSelector } from "react-redux";
 
 function Error() {
   const errorMessage = useSelector((state) => state.errorMessage);
-  const style = {
-    color: "red",
-    background: "lightgrey",
-    fontSize: 20,
-    borderStyle: "solid",
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
-  };
 
   return (
-    <div>{errorMessage ? <div style={style}>{errorMessage}</div> : null}</div>
+    <div>
+      {errorMessage ? (
+        <div className="bg-gray-800 text-red-500 rounded-md p-2 border border-gray-600">
+          {errorMessage}
+        </div>
+      ) : null}
+    </div>
   );
 }
 

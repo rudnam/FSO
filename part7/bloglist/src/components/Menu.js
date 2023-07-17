@@ -1,13 +1,6 @@
 import { Link } from "react-router-dom";
 
 const Menu = ({ user }) => {
-  const navStyle = {
-    backgroundColor: "#d3d3d3",
-    display: "flex",
-    alignItems: "center",
-    gap: "10px",
-    padding: "5px",
-  };
   const ulStyle = {
     display: "flex",
     alignItems: "center",
@@ -18,26 +11,33 @@ const Menu = ({ user }) => {
   };
 
   return (
-    <nav style={navStyle}>
-      <ul style={ulStyle}>
-        <li>
-          <Link to="/">Blogs</Link>
-        </li>
-        <li>
-          <Link to="/users">Users</Link>
-        </li>
-      </ul>
-      <div>{user.name} logged in</div>
+    <nav className="border-b border-gray-700 bg-gray-900 w-full sticky top-0">
+      <div className="flex">
+        <ul className="flex text-white">
+          <li className="p-4 ">
+            <Link to="/" className="hover:underline">
+              Blogs
+            </Link>
+          </li>
+          <li className="p-4">
+            <Link to="/users" className="hover:underline">
+              Users
+            </Link>
+          </li>
+        </ul>
+        <div className="p-4 ml-auto">{user.name} logged in.</div>
 
-      <button
-        type="button"
-        onClick={() => {
-          window.localStorage.removeItem("loggedBlogappUser");
-          window.location.reload();
-        }}
-      >
-        logout
-      </button>
+        <button
+          type="button"
+          onClick={() => {
+            window.localStorage.removeItem("loggedBlogappUser");
+            window.location.reload();
+          }}
+          className="p-4 text-white hover:underline"
+        >
+          Logout
+        </button>
+      </div>
     </nav>
   );
 };

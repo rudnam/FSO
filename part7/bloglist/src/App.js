@@ -53,42 +53,23 @@ function App() {
   }, [blogMatch, blogs]);
 
   return (
-    <div>
+    <div className="flex flex-col bg-gray-900 text-gray-300 h-screen overflow-auto">
       {currentUser === null ? (
         <LoginForm />
       ) : (
-        <div>
+        <>
           <Menu user={currentUser} />
-          <h2>blogs</h2>
-          <Notification />
-          <Error />
-          {currentUser.name} logged in
-          <button
-            type="button"
-            onClick={() => {
-              window.localStorage.removeItem("loggedBlogappUser");
-              window.location.reload();
-            }}
-          >
-            logout
-          </button>
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <div>
-                  <Togglable buttonLabel="new blog">
-                    <BlogForm />
-                  </Togglable>
-                  <BlogList />
-                </div>
-              }
-            />
-            <Route path="/users" element={<UserList />} />
-            <Route path="/users/:id" element={<User user={foundUser} />} />
-            <Route path="/blogs/:id" element={<Blog blog={foundBlog} />} />
-          </Routes>
-        </div>
+          <main className="flex flex-col grow gap-3 py-8 px-16 w-full max-w-5xl h-auto mx-auto border-x border-x-gray-700">
+            <Notification />
+            <Error />
+            <Routes>
+              <Route path="/" element={<BlogList />} />
+              <Route path="/users" element={<UserList />} />
+              <Route path="/users/:id" element={<User user={foundUser} />} />
+              <Route path="/blogs/:id" element={<Blog blog={foundBlog} />} />
+            </Routes>
+          </main>
+        </>
       )}
     </div>
   );
