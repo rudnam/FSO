@@ -25,5 +25,6 @@ module.exports = {
     "react/button-has-type": "off",
     "react/prop-types": "off",
     "react/destructuring-assignment": "off",
+    "react/no-array-index-key": "off",
   },
 };
