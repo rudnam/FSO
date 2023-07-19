@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ALL_BOOKS } from "../queries";
 
 const Books = () => {
@@ -8,6 +8,10 @@ const Books = () => {
   const result = useQuery(ALL_BOOKS, {
     variables: { genre },
   });
+
+  useEffect(() => {
+    result.refetch({ genre });
+  }, [genre]); // eslint-disable-line
 
   if (result.loading) {
     return <div>loading...</div>;
