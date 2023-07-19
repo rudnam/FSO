@@ -3,8 +3,10 @@ import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
 import LoginForm from "./components/LoginForm";
+import Recommend from "./components/Recommend";
 import { useState } from "react";
-import { useApolloClient } from "@apollo/client";
+import { useApolloClient, useQuery } from "@apollo/client";
+import { ME } from "./queries";
 
 const App = () => {
   const [token, setToken] = useState(null);
@@ -15,6 +17,12 @@ const App = () => {
   let hideWhenLoggedIn = token
     ? { display: "none" }
     : { display: "inline-block" };
+
+  const result = useQuery(ME);
+  if (result.loading) {
+    return <div>loading...</div>;
+  }
+  const currentUser = result.data.me;
 
   const logout = () => {
     setToken(null);
@@ -34,6 +42,9 @@ const App = () => {
         <Link to="/addbook" style={showWhenLoggedIn}>
           <button>Add Book</button>
         </Link>
+        <Link to="/recommend" style={showWhenLoggedIn}>
+          <button>Recommend</button>
+        </Link>
         <Link to="/login" style={hideWhenLoggedIn}>
           <button>Login</button>
         </Link>
@@ -47,6 +58,10 @@ const App = () => {
         <Route path="/books" element={<Books />} />
         <Route path="/addbook" element={<NewBook />} />
         <Route path="/login" element={<LoginForm setToken={setToken} />} />
+        <Route
+          path="/recommend"
+          element={<Recommend currentUser={currentUser} />}
+        />
       </Routes>
     </div>
   );
