@@ -1,5 +1,12 @@
 const Books = () => {
-  const books = [];
+  const books = [
+    { title: "Clean Code", author: "Robert Martin", published: 2008 },
+    {
+      title: "Refactoring, edition 2:",
+      author: "Martin Fowler",
+      published: 2018,
+    },
+  ];
 
   return (
     <div>

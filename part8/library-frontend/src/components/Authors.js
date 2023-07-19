@@ -1,10 +1,4 @@
-const Authors = () => {
-  const authors = [
-    { name: "Fyodor Dostoevsky", born: 1989, bookCount: 3 },
-
-    { name: "Martin Fowler", born: 1979, bookCount: 8 },
-  ];
-
+const Authors = ({ authors }) => {
   return (
     <div>
       <h2>authors</h2>
