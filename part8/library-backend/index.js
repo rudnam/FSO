@@ -160,13 +160,13 @@ const resolvers = {
   },
   Mutation: {
     addBook: (root, args) => {
-      if (!authors.includes(args.author)) {
+      if (!authors.find((a) => a.name === args.author)) {
         const author = { name: args.author, id: uuid() };
-        authors.concat(author);
+        authors = authors.concat(author);
       }
 
       const book = { ...args, id: uuid() };
-      books.concat(book);
+      books = books.concat(book);
       return book;
     },
     editAuthor: (root, args) => {
