@@ -1,13 +1,24 @@
-const Books = () => {
-  const books = [
-    { title: "Clean Code", author: "Robert Martin", published: 2008 },
-    {
-      title: "Refactoring, edition 2:",
-      author: "Martin Fowler",
-      published: 2018,
-    },
-  ];
+import { gql, useQuery } from "@apollo/client";
 
+const ALL_BOOKS = gql`
+  query {
+    allBooks {
+      title
+      author
+      published
+      genres
+    }
+  }
+`;
+
+const Books = () => {
+  const result = useQuery(ALL_BOOKS);
+
+  if (result.loading) {
+    return <div>loading...</div>;
+  }
+
+  const books = result.data.allBooks;
   return (
     <div>
       <h2>books</h2>
