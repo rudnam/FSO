@@ -223,7 +223,6 @@ startStandaloneServer(server, {
         process.env.JWT_SECRET
       );
       const currentUser = await User.findById(decodedToken.id);
-      console.log("current user is", currentUser);
       return { currentUser };
     }
   },
