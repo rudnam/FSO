@@ -34,12 +34,7 @@ const resolvers = {
       return context.currentUser;
     },
   },
-  Author: {
-    bookCount: async (root) => {
-      const author = await Author.findOne({ name: root.name });
-      return Book.countDocuments({ author: author._id });
-    },
-  },
+  Author: {},
   Mutation: {
     addBook: async (root, args, context) => {
       const currentUser = context.currentUser;
@@ -52,24 +47,25 @@ const resolvers = {
       }
 
       const { author: authorName, ...rest } = args;
-      const authors = await Author.find({});
-      let author = authors.find((a) => a.name === authorName);
+      let author = await Author.findOne({ name: authorName });
       if (!author) {
-        author = new Author({ name: authorName });
-        try {
-          await author.save();
-        } catch (error) {
-          throw new GraphQLError("Saving author failed", {
-            extensions: {
-              code: "BAD_USER_INPUT",
-              invalidArgs: args.author,
-              error,
-            },
-          });
-        }
+        author = new Author({ name: authorName, bookCount: 0 });
+      }
+      author.bookCount += 1;
+      try {
+        await author.save();
+      } catch (error) {
+        throw new GraphQLError("Saving author failed", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+            invalidArgs: args.author,
+            error,
+          },
+        });
       }
 
       const book = new Book({ ...rest, author });
+
       try {
         await book.save();
       } catch (error) {
