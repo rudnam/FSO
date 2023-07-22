@@ -5,8 +5,8 @@ import NewBook from "./components/NewBook";
 import LoginForm from "./components/LoginForm";
 import Recommend from "./components/Recommend";
 import { useState } from "react";
-import { useApolloClient, useQuery, useSubscription } from "@apollo/client";
-import { BOOK_ADDED, ME } from "./queries";
+import { useApolloClient, useQuery } from "@apollo/client";
+import { ME } from "./queries";
 
 const App = () => {
   const [token, setToken] = useState(null);
@@ -18,13 +18,6 @@ const App = () => {
   let hideWhenLoggedIn = token
     ? { display: "none" }
     : { display: "inline-block" };
-
-  useSubscription(BOOK_ADDED, {
-    onData: ({ data }) => {
-      window.alert("book added");
-      console.log(data);
-    },
-  });
 
   const result = useQuery(ME);
   if (result.loading) {

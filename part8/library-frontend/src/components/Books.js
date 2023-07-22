@@ -1,9 +1,10 @@
-import { useQuery } from "@apollo/client";
+import { useQuery, useSubscription, useApolloClient } from "@apollo/client";
 import { useEffect, useState } from "react";
-import { ALL_BOOKS } from "../queries";
+import { ALL_BOOKS, BOOK_ADDED } from "../queries";
 
 const Books = () => {
   const [genre, setGenre] = useState(null);
+  const client = useApolloClient();
 
   const result = useQuery(ALL_BOOKS, {
     variables: { genre },
@@ -12,6 +13,23 @@ const Books = () => {
   useEffect(() => {
     result.refetch({ genre });
   }, [genre]); // eslint-disable-line
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data }) => {
+      window.alert("book added");
+      const addedBook = data.data.bookAdded;
+      console.log("bookAdded", addedBook);
+
+      client.cache.updateQuery(
+        { query: ALL_BOOKS, variables: { genre } },
+        ({ allBooks }) => {
+          return {
+            allBooks: allBooks.concat(addedBook),
+          };
+        }
+      );
+    },
+  });
 
   if (result.loading) {
     return <div>loading...</div>;
