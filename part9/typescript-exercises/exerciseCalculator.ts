@@ -4,12 +4,13 @@ interface exerciseData {
 }
 
 const parseExerciseArguments = (args: string[]): exerciseData => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_x, _y, targetString, ...hoursArray] = args;
   if (isNaN(Number(targetString)))
     throw new Error("Provided target is not a number!");
   const target = Number(targetString);
 
-  let dailyHours: number[] = [];
+  const dailyHours: number[] = [];
   for (const hours of hoursArray) {
     if (isNaN(Number(hours)))
       throw new Error("Provided hours contained a non-number!");
@@ -50,7 +51,7 @@ export const calculateExercises = (
   let success: boolean;
   let rating: number;
   let ratingDescription: string;
-  let average = totalHours / periodLength;
+  const average = totalHours / periodLength;
   if (average < 0.5 * target) {
     success = false;
     rating = 1;
