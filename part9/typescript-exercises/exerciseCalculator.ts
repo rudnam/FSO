@@ -3,7 +3,7 @@ interface exerciseData {
   target: number;
 }
 
-const parseArguments = (args: string[]): exerciseData => {
+const parseExerciseArguments = (args: string[]): exerciseData => {
   const [_x, _y, targetString, ...hoursArray] = args;
   if (isNaN(Number(targetString)))
     throw new Error("Provided target is not a number!");
@@ -31,7 +31,11 @@ interface Result {
   target: number;
   average: number;
 }
-const calculateExercises = (dailyHours: number[], target: number): Result => {
+
+export const calculateExercises = (
+  dailyHours: number[],
+  target: number
+): Result => {
   let periodLength = 0;
   let trainingDays = 0;
   let totalHours = 0;
@@ -72,7 +76,7 @@ const calculateExercises = (dailyHours: number[], target: number): Result => {
 };
 
 try {
-  const { dailyHours, target } = parseArguments(process.argv);
+  const { dailyHours, target } = parseExerciseArguments(process.argv);
   console.log(calculateExercises(dailyHours, target));
 } catch (error: unknown) {
   let errorMessage = "Something bad happened.";

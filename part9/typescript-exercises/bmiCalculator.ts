@@ -1,11 +1,9 @@
-export {}; // Remove block-scope error for parseArguments
-
 interface physicalData {
   height: number;
   weight: number;
 }
 
-const parseArguments = (args: string[]): physicalData => {
+const parseBmiArguments = (args: string[]): physicalData => {
   if (args.length < 4) throw new Error("Not enough arguments");
   if (args.length > 4) throw new Error("Too many arguments");
 
@@ -19,7 +17,7 @@ const parseArguments = (args: string[]): physicalData => {
   }
 };
 
-const calculateBmi = (height: number, weight: number): string => {
+export const calculateBmi = (height: number, weight: number): string => {
   const bmi = (weight / height ** 2) * 10000;
   if (bmi < 18.5) {
     return "Underweight";
@@ -27,13 +25,12 @@ const calculateBmi = (height: number, weight: number): string => {
     return "Normal (healthy weight)";
   } else if (bmi >= 25 && bmi < 30) {
     return "Overweight";
-  } else if (bmi > 30) {
-    return "Obese";
   }
+  return "Obese";
 };
 
 try {
-  const { height, weight } = parseArguments(process.argv);
+  const { height, weight } = parseBmiArguments(process.argv);
   console.log(calculateBmi(height, weight));
 } catch (error: unknown) {
   let errorMessage = "Something bad happened.";
