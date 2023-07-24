@@ -1,3 +1,27 @@
+interface exerciseData {
+  dailyHours: number[];
+  target: number;
+}
+
+const parseArguments = (args: string[]): exerciseData => {
+  const [_x, _y, targetString, ...hoursArray] = args;
+  if (isNaN(Number(targetString)))
+    throw new Error("Provided target is not a number!");
+  const target = Number(targetString);
+
+  let dailyHours: number[] = [];
+  for (const hours of hoursArray) {
+    if (isNaN(Number(hours)))
+      throw new Error("Provided hours contained a non-number!");
+    dailyHours.push(Number(hours));
+  }
+
+  return {
+    dailyHours,
+    target,
+  };
+};
+
 interface Result {
   periodLength: number;
   trainingDays: number;
@@ -47,5 +71,13 @@ const calculateExercises = (dailyHours: number[], target: number): Result => {
   };
 };
 
-const dailyHours = [3, 0, 2, 4.5, 0, 3, 1];
-console.log(calculateExercises(dailyHours, 2));
+try {
+  const { dailyHours, target } = parseArguments(process.argv);
+  console.log(calculateExercises(dailyHours, target));
+} catch (error: unknown) {
+  let errorMessage = "Something bad happened.";
+  if (error instanceof Error) {
+    errorMessage += " Error: " + error.message;
+  }
+  console.log(errorMessage);
+}
