@@ -15,6 +15,9 @@ const App = () => {
     getAllEntries().then((data) => setEntries(data));
   }, []);
 
+  const visibilityValues = ["great", "good", "ok", "poor"];
+  const weatherValues = ["sunny", "rainy", "cloudy", "stormy", "windy"];
+
   const addEntry = (event: React.SyntheticEvent) => {
     event.preventDefault();
     try {
@@ -48,28 +51,47 @@ const App = () => {
         <h2>Add new entry</h2>
         <p style={{ color: "red" }}>{error}</p>
         <div>
-          date
+          date:{" "}
           <input
             value={date}
+            type="date"
             onChange={(event) => setDate(event.target.value)}
           />
         </div>
         <div>
-          visibility
-          <input
-            value={visibility}
-            onChange={(event) => setVisibility(event.target.value)}
-          />
+          visibility:{" "}
+          {visibilityValues.map((v, i) => {
+            return (
+              <span key={i}>
+                {v}
+                <input
+                  name="visibility"
+                  key={i}
+                  type="radio"
+                  onChange={() => setVisibility(v)}
+                />
+              </span>
+            );
+          })}
         </div>
         <div>
-          weather
-          <input
-            value={weather}
-            onChange={(event) => setWeather(event.target.value)}
-          />
+          weather:{" "}
+          {weatherValues.map((v, i) => {
+            return (
+              <span key={i}>
+                {v}
+                <input
+                  name="weather"
+                  key={i}
+                  type="radio"
+                  onChange={() => setWeather(v)}
+                />
+              </span>
+            );
+          })}
         </div>
         <div>
-          comment
+          comment:{" "}
           <input
             value={comment}
             onChange={(event) => setComment(event.target.value)}
