@@ -9,6 +9,7 @@ const App = () => {
   const [visibility, setVisibility] = useState("");
   const [weather, setWeather] = useState("");
   const [comment, setComment] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     getAllEntries().then((data) => setEntries(data));
@@ -16,14 +17,25 @@ const App = () => {
 
   const addEntry = (event: React.SyntheticEvent) => {
     event.preventDefault();
-    createEntry({
-      date,
-      visibility: parseVisibility(visibility),
-      weather: parseWeather(weather),
-      comment,
-    }).then((data) => {
-      setEntries(entries.concat(data));
-    });
+    try {
+      createEntry({
+        date,
+        visibility: parseVisibility(visibility),
+        weather: parseWeather(weather),
+        comment,
+      }).then((data) => {
+        if (data) {
+          setEntries(entries.concat(data));
+        }
+      });
+    } catch (e) {
+      if (e instanceof Error) {
+        setError("Error: " + e.message);
+        window.setTimeout(() => {
+          setError(null);
+        }, 5000);
+      }
+    }
     setDate("");
     setVisibility("");
     setWeather("");
@@ -34,6 +46,7 @@ const App = () => {
     <div>
       <form onSubmit={addEntry}>
         <h2>Add new entry</h2>
+        <p style={{ color: "red" }}>{error}</p>
         <div>
           date
           <input
