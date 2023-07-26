@@ -1,6 +1,10 @@
-import { Diagnose, Patient } from "../../types";
+import { Diagnose, Entry, Patient } from "../../types";
 import { Female, Male, QuestionMark } from "@mui/icons-material";
 import { Icon } from "@mui/material";
+import HospitalEntry from "./HospitalEntry";
+import HealthCheckEntry from "./HealthCheckEntry";
+import OccupationalHealthcareEntry from "./OccupationalHealthcareEntry";
+import { assertNever } from "../../utils";
 
 interface Props {
   patient: Patient | null;
@@ -26,6 +30,20 @@ const PatientPage = ({ patient, diagnoses }: Props) => {
     default:
       break;
   }
+  console.log(diagnoses);
+
+  const EntryDetails: React.FC<{ entry: Entry }> = ({ entry }) => {
+    switch (entry.type) {
+      case "Hospital":
+        return <HospitalEntry entry={entry} />;
+      case "HealthCheck":
+        return <HealthCheckEntry entry={entry} />;
+      case "OccupationalHealthcare":
+        return <OccupationalHealthcareEntry entry={entry} />;
+      default:
+        return assertNever(entry);
+    }
+  };
 
   return (
     <div>
@@ -37,30 +55,12 @@ const PatientPage = ({ patient, diagnoses }: Props) => {
       <span>ssn: {patient.ssn}</span>
       <br />
       <span>occupation: {patient.occupation}</span>
-      {patient.entries.map((entry) => {
-        return (
-          <div className="entries" id={patient.id}>
-            <h2>entries</h2>
-            <p>
-              {entry.date} <i>{entry.description}</i>
-            </p>
-            {entry.diagnosisCodes && (
-              <ul>
-                {entry.diagnosisCodes.map((code: String, i) => {
-                  const diagnoseItem = diagnoses.find(
-                    (diagnose) => diagnose.code === code
-                  );
-                  return (
-                    <li key={i}>
-                      {code} {diagnoseItem?.name}
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-          </div>
-        );
-      })}
+      <h2>entries</h2>
+      <div className="entries-container">
+        {patient.entries.map((entry, i) => {
+          return <EntryDetails key={i} entry={entry} />;
+        })}
+      </div>
     </div>
   );
 };
