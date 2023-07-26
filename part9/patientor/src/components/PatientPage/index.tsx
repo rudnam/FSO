@@ -1,16 +1,17 @@
-import { Patient } from "../../types";
+import { Diagnose, Patient } from "../../types";
 import { Female, Male, QuestionMark } from "@mui/icons-material";
 import { Icon } from "@mui/material";
 
 interface Props {
   patient: Patient | null;
+  diagnoses: Diagnose[];
 }
 
-const PatientPage = ({ patient }: Props) => {
+const PatientPage = ({ patient, diagnoses }: Props) => {
   if (patient === null) {
     return <div></div>;
   }
-  console.log(patient);
+
   let genderIcon = QuestionMark;
   switch (patient.gender) {
     case "male":
@@ -38,15 +39,22 @@ const PatientPage = ({ patient }: Props) => {
       <span>occupation: {patient.occupation}</span>
       {patient.entries.map((entry) => {
         return (
-          <div className="entries">
+          <div className="entries" id={patient.id}>
             <h2>entries</h2>
             <p>
               {entry.date} <i>{entry.description}</i>
             </p>
             {entry.diagnosisCodes && (
               <ul>
-                {entry.diagnosisCodes.map((code: String) => {
-                  return <li>{code}</li>;
+                {entry.diagnosisCodes.map((code: String, i) => {
+                  const diagnoseItem = diagnoses.find(
+                    (diagnose) => diagnose.code === code
+                  );
+                  return (
+                    <li key={i}>
+                      {code} {diagnoseItem?.name}
+                    </li>
+                  );
                 })}
               </ul>
             )}
