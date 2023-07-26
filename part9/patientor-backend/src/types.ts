@@ -10,8 +10,17 @@ export enum Gender {
   Other = "other",
 }
 
+// For dynamic checking, type is taken from array
+export const ALL_ENTRY_TYPES = [
+  "HealthCheck",
+  "Hospital",
+  "OccupationalHealthcare",
+] as const;
+export type EntryType = (typeof ALL_ENTRY_TYPES)[number];
+
 export interface BaseEntry {
   id: string;
+  type: EntryType;
   description: string;
   date: string;
   specialist: string;
@@ -30,7 +39,7 @@ interface HealthCheckEntry extends BaseEntry {
   healthCheckRating: HealthCheckRating;
 }
 
-interface Discharge {
+export interface Discharge {
   date: string;
   criteria: string;
 }
@@ -40,7 +49,7 @@ interface HospitalEntry extends BaseEntry {
   discharge: Discharge;
 }
 
-interface SickLeave {
+export interface SickLeave {
   startDate: string;
   endDate: string;
 }
@@ -55,6 +64,13 @@ export type Entry =
   | HospitalEntry
   | OccupationHealthcareEntry
   | HealthCheckEntry;
+
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown
+  ? Omit<T, K>
+  : never;
+
+export type NewEntry = UnionOmit<Entry, "id">;
+export type NewBaseEntry = Omit<BaseEntry, "id">;
 
 export interface Patient {
   id: string;
