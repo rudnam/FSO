@@ -36,6 +36,23 @@ const PatientPage = ({ patient }: Props) => {
       <span>ssn: {patient.ssn}</span>
       <br />
       <span>occupation: {patient.occupation}</span>
+      {patient.entries.map((entry) => {
+        return (
+          <div className="entries">
+            <h2>entries</h2>
+            <p>
+              {entry.date} <i>{entry.description}</i>
+            </p>
+            {entry.diagnosisCodes && (
+              <ul>
+                {entry.diagnosisCodes.map((code: String) => {
+                  return <li>{code}</li>;
+                })}
+              </ul>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 };
