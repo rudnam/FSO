@@ -1,8 +1,8 @@
 import { Work } from "@mui/icons-material";
-import { Entry } from "../../types";
+import { OccupationalHealthcareEntry as OccupationalHealthcareEntryType } from "../../types";
 
 interface Props {
-  entry: Entry;
+  entry: OccupationalHealthcareEntryType;
 }
 
 const OccupationalHealthcareEntry = ({ entry }: Props) => {
@@ -22,6 +22,15 @@ const OccupationalHealthcareEntry = ({ entry }: Props) => {
       <i>{entry.description}</i>
       <br />
       diagnose by {entry.specialist}
+      <br />
+      Employer name: {entry.employerName}
+      <br />
+      {entry.sickLeave ? (
+        <div>
+          Sick leave start date: {entry.sickLeave.startDate} <br /> Sick leave
+          end date: {entry.sickLeave.endDate}
+        </div>
+      ) : null}
     </div>
   );
 };

@@ -1,7 +1,23 @@
-import { Discharge, SickLeave } from "./types";
+import { Discharge, EntryType, SickLeave } from "./types";
 
 export const assertNever = (value: never): never => {
   throw new Error(`Unhandled value: ${JSON.stringify(value)}`);
+};
+
+export const parseEntryType = (entryType: unknown): EntryType => {
+  if (!isString(entryType) || !isEntryType(entryType)) {
+    throw new Error("Incorrect entry type: " + entryType);
+  }
+  return entryType;
+};
+
+const isEntryType = (param: string): param is EntryType => {
+  const entryTypes = ["HealthCheck", "Hospital", "OccupationalHealthcare"];
+  return entryTypes.map((v) => v.toString()).includes(param);
+};
+
+const isString = (text: unknown): text is string => {
+  return typeof text === "string" || text instanceof String;
 };
 
 export const parseDischarge = (discharge: unknown): Discharge => {

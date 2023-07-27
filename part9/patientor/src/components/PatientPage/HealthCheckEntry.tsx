@@ -22,7 +22,7 @@ const HealthCheckEntry = ({ entry }: Props) => {
       <br />
       <i>{entry.description}</i>
       <br />
-      {entry.healthCheckRating}
+      Health check rating: {entry.healthCheckRating}
       <br />
       diagnose by {entry.specialist}
     </div>

@@ -1,8 +1,8 @@
 import { LocalHospital } from "@mui/icons-material";
-import { Entry } from "../../types";
+import { HospitalEntry as HospitalEntryType } from "../../types";
 
 interface Props {
-  entry: Entry;
+  entry: HospitalEntryType;
 }
 
 const HospitalEntry = ({ entry }: Props) => {
@@ -22,6 +22,10 @@ const HospitalEntry = ({ entry }: Props) => {
       <i>{entry.description}</i>
       <br />
       diagnose by {entry.specialist}
+      <br />
+      Discharge date: {entry.discharge.date}
+      <br />
+      Discharge criteria: {entry.discharge.criteria}
     </div>
   );
 };
