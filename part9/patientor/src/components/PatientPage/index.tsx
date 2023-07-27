@@ -44,7 +44,6 @@ const PatientPage = ({ patient, diagnoses }: Props) => {
     default:
       break;
   }
-  console.log(diagnoses);
 
   const submitNewEntry = async (values: EntryFormValues) => {
     try {

@@ -182,33 +182,32 @@ const isHealthCheckRating = (param: number): param is HealthCheckRating => {
 };
 
 const baseToHospital = (baseEntry: NewBaseEntry, object: object): NewEntry => {
-  if ("dischargeDate" in object && "dischargeCriteria" in object) {
+  if ("discharge" in object) {
     const hospitalEntry: NewEntry = {
       ...baseEntry,
       type: "Hospital",
-      discharge: parseDischarge({
-        date: object.dischargeDate,
-        criteria: object.dischargeCriteria,
-      }),
+      discharge: parseDischarge(object.discharge),
     };
     return hospitalEntry;
   }
   throw new Error("Incomplete data for Hospital entry");
 };
 
-const parseDischarge = ({
-  date,
-  criteria,
-}: {
-  date: unknown;
-  criteria: unknown;
-}): Discharge => {
-  if (!isString(date) || !isDate(date)) {
-    throw new Error("Incorrect data for Discharge date: " + date);
-  } else if (!isString(criteria)) {
-    throw new Error("Incorrect data for Discharge criteria: " + criteria);
+const parseDischarge = (discharge: unknown): Discharge => {
+  if (
+    discharge === null ||
+    typeof discharge !== "object" ||
+    !isDischarge(discharge)
+  ) {
+    throw new Error(
+      "Incorrect data for Discharge: " + JSON.stringify(discharge)
+    );
   }
-  return { date, criteria };
+  return discharge;
+};
+
+const isDischarge = (param: object): param is Discharge => {
+  return "date" in param && "criteria" in param;
 };
 
 const baseToOccupationalHealthcare = (
@@ -216,11 +215,8 @@ const baseToOccupationalHealthcare = (
   object: object
 ): NewEntry => {
   if ("employerName" in object) {
-    if ("sickLeaveStartDate" in object && "sickLeaveEndDate" in object) {
-      const sickLeave = parseSickLeave({
-        startDate: object.sickLeaveStartDate,
-        endDate: object.sickLeaveEndDate,
-      });
+    if ("sickLeave" in object) {
+      const sickLeave = parseSickLeave(object.sickLeave);
 
       return {
         ...baseEntry,
@@ -239,19 +235,19 @@ const baseToOccupationalHealthcare = (
   throw new Error("Incomplete data for Occupational healthcare entry");
 };
 
-const parseSickLeave = ({
-  startDate,
-  endDate,
-}: {
-  startDate: unknown;
-  endDate: unknown;
-}): SickLeave => {
-  if (!isString(startDate) || !isDate(startDate)) {
-    throw new Error("Incorrect sick leave start date: " + startDate);
-  } else if (!isString(endDate) || !isDate(endDate)) {
-    throw new Error("Incorrect sick leave end date: " + endDate);
+const parseSickLeave = (sickLeave: unknown): SickLeave => {
+  if (
+    sickLeave === null ||
+    typeof sickLeave !== "object" ||
+    !isSickLeave(sickLeave)
+  ) {
+    throw new Error("Incorrect Sick leave: " + JSON.stringify(sickLeave));
   }
-  return { startDate, endDate };
+  return sickLeave;
+};
+
+const isSickLeave = (param: object): param is SickLeave => {
+  return "startDate" in param && "endDate" in param;
 };
 
 export default toNewPatient;
