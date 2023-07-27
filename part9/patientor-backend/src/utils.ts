@@ -127,11 +127,17 @@ const isEntryType = (param: string): param is EntryType => {
   return entryTypes.map((v) => v.toString()).includes(param);
 };
 
-const parseDiagnosisCodes = (object: unknown): Array<Diagnose["code"]> => {
-  if (!object || typeof object !== "object" || !("diagnosisCodes" in object)) {
+const parseDiagnosisCodes = (param: unknown): Array<Diagnose["code"]> => {
+  if (!isStringArray(param)) {
     return [] as Array<Diagnose["code"]>;
   }
-  return object.diagnosisCodes as Array<Diagnose["code"]>;
+  return param;
+};
+
+const isStringArray = (param: unknown): param is string[] => {
+  return (
+    Array.isArray(param) && param.every((item) => typeof item === "string")
+  );
 };
 
 const baseToHealthCheck = (
@@ -153,7 +159,6 @@ const parseHealthCheckRating = (
   healthCheckRating: unknown
 ): HealthCheckRating => {
   if (
-    !isString(healthCheckRating) ||
     !isNumber(healthCheckRating) ||
     !isHealthCheckRating(Number(healthCheckRating))
   ) {
@@ -164,8 +169,12 @@ const parseHealthCheckRating = (
   return Number(healthCheckRating);
 };
 
-const isNumber = (param: string) => {
-  return !isNaN(parseFloat(param));
+const isNumber = (param: unknown) => {
+  return (
+    typeof param === "number" ||
+    param instanceof Number ||
+    (isString(param) && !isNaN(parseFloat(param)))
+  );
 };
 
 const isHealthCheckRating = (param: number): param is HealthCheckRating => {

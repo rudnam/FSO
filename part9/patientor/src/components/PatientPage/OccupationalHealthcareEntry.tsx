@@ -14,14 +14,12 @@ const OccupationalHealthcareEntry = ({ entry }: Props) => {
   if (entry === null) {
     return <div></div>;
   }
-  console.log(entry);
 
   return (
     <div style={style}>
       {entry.date} <Work fontSize="inherit" />
       <br />
       <i>{entry.description}</i>
-      {entry.date}
       <br />
       diagnose by {entry.specialist}
     </div>

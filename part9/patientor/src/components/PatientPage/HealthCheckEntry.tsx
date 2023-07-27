@@ -15,14 +15,12 @@ const HealthCheckEntry = ({ entry }: Props) => {
   if (entry === null) {
     return <div></div>;
   }
-  console.log(entry);
 
   return (
     <div style={style}>
       {entry.date} <MedicalServices fontSize="inherit" />
       <br />
       <i>{entry.description}</i>
-      {entry.date}
       <br />
       {entry.healthCheckRating}
       <br />
